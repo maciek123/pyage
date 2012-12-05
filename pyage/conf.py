@@ -1,5 +1,5 @@
 import operators
-from pyage.AddressProvider import AddressProvider
+from pyage.address import AddressProvider
 from pyage.events import EventHook
 
 print "parsing config"

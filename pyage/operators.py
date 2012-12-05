@@ -1,5 +1,5 @@
 import random
-from pyage.PointGenotype import PointGenotype
+from pyage.genotype import PointGenotype
 
 def points_population_generator():
     return [PointGenotype(random.random(), random.random()) for _ in range(100)]
