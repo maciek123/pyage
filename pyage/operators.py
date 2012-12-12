@@ -1,8 +1,14 @@
 import random
+from pyage.events import EventHook
 from pyage.genotype import PointGenotype
+from pyage.inject import Inject
 
 def points_population_generator():
     return [PointGenotype(random.random(), random.random()) for _ in range(100)]
+
+
+def points_population_generator_factory():
+    return points_population_generator
 
 
 def rosenbrock(point):
@@ -27,5 +33,27 @@ def random_mutation(population):
         point.y += random.random() * 10 - 5
 
 
-def random_stop_condition(population):
-    return random.random() > 0.99
+def random_stop_condition_factory():
+    return random_stop_condition
+
+
+class RandomStopCondition(object):
+    @Inject("myEvent")
+    def __init__(self, config):
+        pass
+
+    def should_stop(self, population):
+        stop = random.random() > 0.99
+        if stop:
+            self.myEvent.fire(population)
+        return stop
+
+
+
+event = EventHook()
+
+def end(population):
+    print "end: ",
+    print population
+
+event += lambda population: end(population)

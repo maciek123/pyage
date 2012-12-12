@@ -2,12 +2,9 @@ import operators
 from pyage.address import AddressProvider
 from pyage.events import EventHook
 
-print "parsing config"
+addressProvider = lambda: AddressProvider()
+population_generator = operators.points_population_generator_factory
+op = lambda: [operators.random_selection, operators.random_mutation, operators.rosenbrock_evaluation]
+stop_condition = lambda: operators.RandomStopCondition("conf")
 
-population_generator = operators.points_population_generator
-op = [operators.random_selection, operators.random_mutation, operators.rosenbrock_evaluation]
-stop_condition=operators.random_stop_condition
-
-
-addressProvider = AddressProvider()
-myEvent = EventHook()
+myEvent = lambda: operators.event
