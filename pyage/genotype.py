@@ -3,3 +3,8 @@ class PointGenotype(object):
         self.x = x
         self.y = y
         self.fitness = 0
+
+    def __repr__(self):
+        return  "[(%s, %s) %s]" % (self.x, self.y, self.fitness)
+
+

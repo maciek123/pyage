@@ -1,6 +1,5 @@
 import operators
 from pyage.address import AddressProvider
-from pyage.events import EventHook
 
 addressProvider = lambda: AddressProvider()
 population_generator = operators.points_population_generator_factory

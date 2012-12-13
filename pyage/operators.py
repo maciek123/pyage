@@ -13,7 +13,7 @@ def points_population_generator_factory():
 
 def rosenbrock(point):
     x, y = point.x, point.y
-    point.fitness = (1 - x) ** 2 + 100 * (y - x ** 2) ** 2
+    point.fitness = -(1 - x) ** 2 - 100 * (y - x ** 2) ** 2
     return point
 
 
@@ -31,10 +31,6 @@ def random_mutation(population):
     for point in population:
         point.x += random.random() * 10 - 5
         point.y += random.random() * 10 - 5
-
-
-def random_stop_condition_factory():
-    return random_stop_condition
 
 
 class RandomStopCondition(object):
@@ -55,5 +51,7 @@ event = EventHook()
 def end(population):
     print "end: ",
     print population
+    print "best: ",
+    print reduce(lambda x,y: x.fitness > y.fitness and x or y, population)
 
 event += lambda population: end(population)
