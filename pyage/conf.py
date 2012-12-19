@@ -1,9 +1,13 @@
-import operators
-from pyage.address import AddressProvider
+# coding=utf-8
 
-addressProvider = lambda: AddressProvider()
+#przykładowa konfiguracja dla algorytmu genetycznego
+
+import operators
+
+project_name = 'pyage'
+
 population_generator = operators.points_population_generator_factory
 op = lambda: [operators.random_selection, operators.random_mutation, operators.rosenbrock_evaluation]
-stop_condition = lambda: operators.RandomStopCondition("conf")
+stop_condition = operators.RandomStopCondition
 
-myEvent = lambda: operators.event
+event_manager = lambda: operators.event

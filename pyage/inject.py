@@ -1,3 +1,6 @@
+
+config = 'conf'
+
 class Inject(object):
     def __init__(self, *args):
         """
@@ -19,9 +22,20 @@ class Inject(object):
         """
 
         def wrapped_f(*args):
-            conf = self.read_config(args[1])
+            conf = self.read_config(config)
             for arg in self.args:
                 setattr(args[0], arg, getattr(conf, arg)())
             f(*args)
 
         return wrapped_f
+
+
+class Singleton(object):
+    def __init__(self, f):
+        self.result = None
+
+    def __call__(self, f):
+        if not self.result:
+            self.result = f()
+        return self.result
+

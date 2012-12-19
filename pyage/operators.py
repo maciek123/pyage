@@ -34,14 +34,14 @@ def random_mutation(population):
 
 
 class RandomStopCondition(object):
-    @Inject("myEvent")
-    def __init__(self, config):
+    @Inject("event_manager")
+    def __init__(self):
         pass
 
     def should_stop(self, population):
         stop = random.random() > 0.99
         if stop:
-            self.myEvent.fire(population)
+            self.event_manager.fire(population)
         return stop
 
 
