@@ -3,6 +3,7 @@
 #przykładowa konfiguracja dla algorytmu genetycznego
 
 import operators
+from pyage import address
 
 project_name = 'pyage'
 
@@ -11,3 +12,6 @@ op = lambda: [operators.random_selection, operators.random_mutation, operators.r
 stop_condition = operators.RandomStopCondition
 
 event_manager = lambda: operators.event
+
+
+address_provider = lambda: address.AddressProvider()
