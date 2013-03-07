@@ -1,5 +1,5 @@
 
-config = 'conf'
+config = None
 
 class Inject(object):
     def __init__(self, *args):

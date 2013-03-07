@@ -1,4 +1,4 @@
-from pyage.inject import Inject
+from pyage.core.inject import Inject
 
 class AddressProvider(object):
     def __init__(self):
@@ -12,4 +12,7 @@ class Addressable(object):
     @Inject("address_provider")
     def __init__(self):
         super(Addressable, self).__init__()
-        self.address = self.address_provider.generate_address(self)
+        if hasattr(self, "name") and self.name:
+            self.address = self.name
+        else:
+            self.address = self.address_provider.generate_address(self)

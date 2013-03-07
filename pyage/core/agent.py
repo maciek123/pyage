@@ -1,5 +1,6 @@
 import random
-from pyage.address import Addressable
+from time import sleep
+from pyage.core.address import Addressable
 
 class Agent(Addressable):
     def __init__(self):
@@ -10,7 +11,8 @@ class Agent(Addressable):
     def step(self):
         print "step ",
         self.fitness = random.random()
-        print self.fitness
+        print self.address, self.fitness
+        sleep(1)
 
     def get_address(self):
         return self.address
