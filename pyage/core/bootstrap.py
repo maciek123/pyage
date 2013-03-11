@@ -6,7 +6,7 @@ from pyage.core.workspace import Workspace
 
 if __name__ == '__main__':
     inject.config = sys.argv[1]
-    import pyage_conf as pyage_conf
+    exec "import " + sys.argv[2] + " as pyage_conf"
 
     workspace = Workspace(pyage_conf.workspace_name)
     for agent in pyage_conf.agents:
@@ -14,9 +14,9 @@ if __name__ == '__main__':
     print workspace.address
     daemon = Pyro4.Daemon()
     ns = Pyro4.locateNS()
-    threading.Thread(target=daemon.requestLoop).start()
     uri = daemon.register(workspace)
     ns.register(workspace.address, uri)
+    threading.Thread(target=daemon.requestLoop).start()
     print     ns.list()
     print uri
     while True:

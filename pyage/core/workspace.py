@@ -4,7 +4,6 @@ class Workspace(Addressable):
     def __init__(self, name=None):
         self.name = name
         super(Workspace, self).__init__()
-
         self.__agents = {}
 
     def get_agents(self):

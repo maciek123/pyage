@@ -3,7 +3,8 @@ from time import sleep
 from pyage.core.address import Addressable
 
 class Agent(Addressable):
-    def __init__(self):
+    def __init__(self, name=None):
+        self.name = name
         super(Agent, self).__init__()
         print self.address
         self.fitness = 0
