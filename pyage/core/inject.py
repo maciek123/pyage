@@ -24,7 +24,9 @@ class Inject(object):
         def wrapped_f(*args):
             conf = self.read_config(config)
             for arg in self.args:
-                setattr(args[0], arg, getattr(conf, arg)())
+                conf_arg_name = arg.split(":")[0]
+                property_name = arg.split(":")[-1]
+                setattr(args[0], property_name, getattr(conf, conf_arg_name)())
             f(*args)
 
         return wrapped_f

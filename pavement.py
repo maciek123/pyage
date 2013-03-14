@@ -2,11 +2,12 @@
 from paver.easy import *
 import paver.doctools
 from paver.setuputils import setup
+from setuptools import find_packages
 
 setup(
-    name="PythonAgentBasedEvolution",
-    packages=['pyage'],
-    version="1.0",
+    name="pyage",
+    packages=find_packages(),
+    version="0.1",
     author="Maciej Kaziród",
     author_email="kmaciej@student.agh.edu.pl"
 )
@@ -16,4 +17,10 @@ setup(
 @needs('generate_setup', 'minilib', 'setuptools.command.sdist')
 def sdist():
     """Overrides sdist to make sure that our setup.py is generated."""
+    pass
+
+
+@task
+@needs("setuptools.command.bdist_egg")
+def egg():
     pass

@@ -9,6 +9,6 @@ from pyage.core.migration import migrate_agent
 sys.excepthook = Pyro4.util.excepthook
 
 
-print query_property("workspace.Max.3721", "makz", "fitness")
+print query_property("workspace.Max.4811", "makz", "fitness")
 #migrate_agent("workspace.Max.3251", "workspace", "makz")
 print "!"

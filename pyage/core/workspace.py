@@ -1,10 +1,10 @@
 from pyage.core.address import Addressable
+from inject import Inject
 
 class Workspace(Addressable):
-    def __init__(self, name=None):
-        self.name = name
+    @Inject("workspace_name:name", "agents:_Workspace__agents")
+    def __init__(self):
         super(Workspace, self).__init__()
-        self.__agents = {}
 
     def get_agents(self):
         return self.__agents.values()
