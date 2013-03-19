@@ -1,3 +1,4 @@
+
 class Operator(object):
     def __init__(self, type=None):
         super(Operator, self).__init__()
@@ -7,4 +8,6 @@ class Operator(object):
         pass
 
     def is_compatible(self, operator):
-        return operator.required_type == self.required_type
+        return  self.required_type == None\
+                or operator.required_type == None\
+                or operator.required_type == self.required_type
