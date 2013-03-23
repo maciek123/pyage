@@ -1,8 +1,11 @@
+import Pyro4
 from pyage.core.address import Addressable
 from inject import Inject
 
+WORKSPACE = "workspace"
+
 class Workspace(Addressable):
-    @Inject("workspace_name:name", "agents:_Workspace__agents", "migration")
+    @Inject("agents:_Workspace__agents", "migration", "ns_hostname", "daemon")
     def __init__(self):
         super(Workspace, self).__init__()
         self.steps = 0
@@ -18,9 +21,15 @@ class Workspace(Addressable):
         for agent in self.__agents.values():
             agent.step()
 
-    def add_agent(self, agent):
-        self.__agents[agent.address] = agent
-        agent.workspace = self
+    def publish_agents(self):
+        for agent in self.__agents.values():
+            try:
+                uri = self.daemon.register(agent)
+                ns = Pyro4.locateNS(self.ns_hostname)
+                ns.register("agent." + agent.address, uri)
+                print( ns.list())
+            except:
+                print "could not locate nameserver"
 
     def get_agent(self, address):
         return self.__agents[address]
@@ -31,3 +40,11 @@ class Workspace(Addressable):
         agent.workspace = None
         return agent
 
+    def publish(self):
+        uri = self.daemon.register(self)
+        try:
+            ns = Pyro4.locateNS(self.ns_hostname)
+            ns.register(WORKSPACE + '.' + self.address, uri)
+            print( ns.list())
+        except:
+            print "could not locate nameserver"

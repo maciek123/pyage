@@ -1,7 +1,29 @@
+import logging
+import random
 import Pyro4
+from pyage.core.inject import Inject
 
-def list_workspaces():
-    ns = Pyro4.locateNS()
-    return ns.list("workspace")
+class Pyro4Locator(object):
+    @Inject("ns_hostname")
+    def __init__(self):
+        super(Pyro4Locator, self).__init__()
 
-print list_workspaces()
+    def list_workspaces(self):
+        ns = Pyro4.locateNS()
+        return ns.list("workspace")
+
+    def get_neighbour(self, agent):
+        try:
+            random_agent = self.__get_random_agent(agent)
+            print random_agent.get_address()
+            return  random_agent
+        except:
+            logging.exception('')
+
+    def __get_random_agent(self, a):
+        ns = Pyro4.locateNS(self.ns_hostname)
+        agents = ns.list("agent")
+        print agents
+        del agents["agent." + a.address]
+        return Pyro4.Proxy(random.choice(agents.values()))
+

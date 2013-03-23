@@ -5,4 +5,13 @@ class PointGenotype(object):
         self.y = y
         self.fitness = None
 
+    def __str__(self):
+        return "(%s, %s), f:%s" % (self.x, self.y, self.fitness)
+
+    def __repr__(self):
+        return self.__str__()
+
+
+
+
 

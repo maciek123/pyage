@@ -7,17 +7,10 @@ from pyage.core.workspace import Workspace
 if __name__ == '__main__':
     inject.config = sys.argv[1]
     workspace = Workspace()
+    workspace.publish()
+    workspace.publish_agents()
     print workspace.address
-    daemon = Pyro4.Daemon()
-    uri = daemon.register(workspace)
-    try:
-        ns = Pyro4.locateNS(sys.argv[2])
-        ns.register(workspace.address, uri)
-        print( ns.list())
-    except:
-        print "could not locate nameserver"
-    threading.Thread(target=daemon.requestLoop).start()
-    print uri
+    threading.Thread(target=workspace.daemon.requestLoop).start()
     while True:
         workspace.step()
 

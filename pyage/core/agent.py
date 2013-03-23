@@ -1,9 +1,9 @@
-import random
 from time import sleep
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
 
 class Agent(Addressable):
+    @Inject("locator")
     def __init__(self, name=None):
         self.name = name
         super(Agent, self).__init__()
@@ -11,6 +11,7 @@ class Agent(Addressable):
         self.population = []
         self.validate_operators()
         self.initialize()
+        self.steps = 0
 
     @Inject("operators", "initializer")
     def validate_operators(self):
@@ -22,10 +23,16 @@ class Agent(Addressable):
         self.initializer.process(self.population)
 
     def step(self):
-        print "step ",
-        print self.address, self.get_fitness(), self.operators
+        self.steps += 1
+        print self.address, self.get_fitness(), self.population
         for o in self.operators:
             o.process(self.population)
+        if self.steps % 10 == 0:
+            neighbour = self.locator.get_neighbour(self)
+            if neighbour:
+                print "neighbour: ",neighbour.get_address(), self.population
+                probe = list(self.population[::2])
+                neighbour.add_genotype(probe)
         sleep(1)
 
     def get_address(self):
@@ -33,6 +40,10 @@ class Agent(Addressable):
 
     def get_fitness(self):
         return max(genotype.fitness for genotype in self.population)
+
+    def add_genotype(self, population):
+        print "received genotype: ", population
+        self.population.extend(population)
 
 
 def agents_factory(*args):

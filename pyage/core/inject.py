@@ -26,7 +26,7 @@ class Inject(object):
                 conf_arg_name = arg.split(":")[0]
                 property_name = arg.split(":")[-1]
                 try:
-                    attr = getattr(conf, args[0].address + '__' + conf_arg_name)()
+                    attr = getattr(conf, args[0].address.split('.')[0] + '__' + conf_arg_name)()
                 except:
                     attr = getattr(conf, conf_arg_name)()
                 setattr(args[0], property_name, attr)

@@ -2,7 +2,7 @@ from math import cos, pi
 from pyage.core.operator import Operator
 from pyage.solutions.evolution.genotype import PointGenotype
 
-A = 10
+A = 20
 
 class RastriginEvaluation(Operator):
     def __init__(self, type=None):
