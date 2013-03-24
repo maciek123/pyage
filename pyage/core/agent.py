@@ -2,6 +2,8 @@ from time import sleep
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
 
+AGENT = "agent"
+
 class Agent(Addressable):
     @Inject("locator")
     def __init__(self, name=None):

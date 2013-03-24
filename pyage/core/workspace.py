@@ -1,6 +1,7 @@
 import Pyro4
 from pyage.core.address import Addressable
 from inject import Inject
+from pyage.core.agent import AGENT
 
 WORKSPACE = "workspace"
 
@@ -26,7 +27,7 @@ class Workspace(Addressable):
             try:
                 uri = self.daemon.register(agent)
                 ns = Pyro4.locateNS(self.ns_hostname)
-                ns.register("agent." + agent.address, uri)
+                ns.register('%s.%s' % (AGENT, agent.address), uri)
                 print( ns.list())
             except:
                 print "could not locate nameserver"

@@ -1,6 +1,7 @@
 import logging
 import random
 import Pyro4
+from pyage.core.agent import AGENT
 from pyage.core.inject import Inject
 
 class Pyro4Locator(object):
@@ -22,8 +23,8 @@ class Pyro4Locator(object):
 
     def __get_random_agent(self, a):
         ns = Pyro4.locateNS(self.ns_hostname)
-        agents = ns.list("agent")
+        agents = ns.list(AGENT)
         print agents
-        del agents["agent." + a.address]
+        del agents[AGENT + a.address]
         return Pyro4.Proxy(random.choice(agents.values()))
 
