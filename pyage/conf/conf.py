@@ -15,11 +15,12 @@ from pyage.solutions.evolution.mutation import UniformPointMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = agents_factory("max")
+step_limit = lambda: 1000
 
 makz__operators = lambda: [Operator()]
-max__operators = lambda: [RastriginEvaluation(), TournamentSelection(size=2, tournament_size=2),
-                          AverageCrossover(size=4), UniformPointMutation()]
-initializer = lambda: PointInitializer(4, -100, 100)
+max__operators = lambda: [RastriginEvaluation(), TournamentSelection(size=20, tournament_size=10),
+                          AverageCrossover(size=100), UniformPointMutation()]
+initializer = lambda: PointInitializer(100, -1000, 1000)
 
 address_provider = address.AddressProvider
 
@@ -28,4 +29,4 @@ locator = Pyro4Locator
 pyro_daemon = Pyro4.Daemon()
 daemon = lambda: pyro_daemon
 
-ns_hostname = lambda: "max"
+ns_hostname = lambda: "192.168.0.103"

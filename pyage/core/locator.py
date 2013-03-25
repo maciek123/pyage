@@ -25,6 +25,6 @@ class Pyro4Locator(object):
         ns = Pyro4.locateNS(self.ns_hostname)
         agents = ns.list(AGENT)
         print agents
-        del agents[AGENT + a.address]
+        del agents[AGENT + "." + a.address]
         return Pyro4.Proxy(random.choice(agents.values()))
 

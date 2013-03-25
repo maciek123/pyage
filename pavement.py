@@ -7,7 +7,7 @@ from setuptools import find_packages
 setup(
     name="pyage",
     packages=find_packages(),
-    version="0.1",
+    version="0.2.1",
     author="Maciej Kaziród",
     author_email="kmaciej@student.agh.edu.pl"
 )

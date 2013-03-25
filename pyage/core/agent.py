@@ -35,7 +35,6 @@ class Agent(Addressable):
                 print "neighbour: ",neighbour.get_address(), self.population
                 probe = list(self.population[::2])
                 neighbour.add_genotype(probe)
-        sleep(1)
 
     def get_address(self):
         return self.address
