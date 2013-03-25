@@ -6,8 +6,9 @@ from setuptools import find_packages
 
 setup(
     name="pyage",
+    description="Python Agent-based evolution",
     packages=find_packages(),
-    version="0.2.1",
+    version="0.3",
     author="Maciej Kaziród",
     author_email="kmaciej@student.agh.edu.pl"
 )

@@ -18,6 +18,6 @@ if __name__ == '__main__':
     while not workspace.stopped:
         workspace.step()
         if sys.argv[2]:
-            sleep(int(sys.argv[2]))
+            sleep(float(sys.argv[2]))
     workspace.daemon.close()
 

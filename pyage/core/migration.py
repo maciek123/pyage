@@ -1,18 +1,33 @@
+import logging
+import random
 import Pyro4
+from pyage.core.agent import AGENT
 from pyage.core.inject import Inject
 
 class Pyro4Migration(object):
-
 
     @Inject("ns_hostname")
     def __init__(self):
         super(Pyro4Migration, self).__init__()
 
-    def migrate_agent(self, src_workspace_name, dest_workspace_name, address):
-        ns = Pyro4.locateNS(self.ns_hostname)
-        src_workspace = Pyro4.Proxy(ns.lookup(src_workspace_name))
-        dest_workspace = Pyro4.Proxy(ns.lookup(dest_workspace_name))
-        src_workspace.ping()
-        dest_workspace.ping()
-        dest_workspace.add_agent(src_workspace.remove_agent(address))
+    def migrate(self, agent):
+        try:
+            if random.random() > 0.95:
+                print "migrating!"
+                aggregate = self.__get_random_aggregate(agent)
+                print aggregate.get_address()
+                aggregate.add_agent(agent.parent.remove_agent(agent))
+        except:
+            logging.exception("")
 
+    def __get_random_aggregate(self,agent):
+        ns = Pyro4.locateNS(self.ns_hostname)
+        agents = ns.list(AGENT)
+        print agents
+        del agents[AGENT + "." + agent.parent.address]
+        return Pyro4.Proxy(random.choice(agents.values()))
+
+
+class NoMigration(object):
+    def migrate(self, agent):
+        pass

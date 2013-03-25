@@ -28,3 +28,10 @@ class Pyro4Locator(object):
         del agents[AGENT + "." + a.address]
         return Pyro4.Proxy(random.choice(agents.values()))
 
+
+class ParentLocator(object):
+    def get_neighbour(self, agent):
+        siblings = list(agent.parent.get_agents())
+        siblings.remove(agent)
+        print siblings
+        return random.choice(siblings)
