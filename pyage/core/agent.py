@@ -1,7 +1,9 @@
 import logging
-from time import sleep
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
+
+
+logger = logging.getLogger(__name__)
 
 AGENT = "agent"
 
@@ -16,7 +18,7 @@ class AbstractAgent:
         return max(genotype.fitness for genotype in self.population)
 
     def add_genotype(self, population):
-        print "received genotype: ", population
+        logger.debug("received genotype!")
         self.population.extend(population)
 
     @Inject("operators", "initializer")
@@ -86,6 +88,7 @@ class AggregateAgent(Addressable, AbstractAgent):
     def get_agents(self):
         return self.__agents.values()
 
+
 def agents_factory(*args):
     def factory():
         agents = {}
@@ -93,6 +96,7 @@ def agents_factory(*args):
             agent = Agent(name)
             agents[agent.get_address()] = agent
         return agents
+
     return factory
 
 
@@ -103,4 +107,5 @@ def aggregate_agents_factory(*args):
             agent = AggregateAgent(name)
             agents[agent.get_address()] = agent
         return agents
+
     return factory
