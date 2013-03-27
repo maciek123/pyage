@@ -14,7 +14,7 @@ from pyage.solutions.evolution.mutation import UniformPointMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = agents_factory("max")
-step_limit = lambda: 1000000
+step_limit = lambda: 10000
 
 makz__operators = lambda: [Operator()]
 max__operators = lambda: [RastriginEvaluation(), TournamentSelection(size=20, tournament_size=10),
