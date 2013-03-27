@@ -15,9 +15,9 @@ from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = aggregate_agents_factory("aggregate")
 
-step_limit = lambda: 1000
+step_limit = lambda: 50
 
-aggregated_agents = lambda: emas_initializer(energy=10, size=1000, lowerbound=-100, upperbound=100)
+aggregated_agents = lambda: emas_initializer(energy=10, size=100, lowerbound=-100, upperbound=100)
 
 emas = EmasService
 
@@ -28,7 +28,7 @@ newborn_energy = lambda: 10
 
 evaluation = RastriginEvaluation
 crossover = AverageCrossover
-mutation = lambda: UniformPointMutation(probability=1)
+mutation = UniformPointMutation
 
 address_provider = address.AddressProvider
 

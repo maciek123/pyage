@@ -1,4 +1,5 @@
 import logging
+import random
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
 
@@ -66,8 +67,6 @@ class EmasService(object):
     @Inject("minimal_energy", "reproduction_minimum", "migration_minimum", "newborn_energy")
     def __init__(self):
         super(EmasService, self).__init__()
-        logger.debug("emas params: %s %s %s %s", self.minimal_energy, self.reproduction_minimum, self.migration_minimum,
-            self.newborn_energy)
 
     def should_die(self, agent):
         return agent.get_energy() < self.minimal_energy
@@ -84,6 +83,7 @@ class EmasService(object):
         a1.energy -= self.newborn_energy / 2
         a2.add_energy(-self.newborn_energy / 2)
         genotype = a1.crossover.cross(a1.genotype, a2.get_genotype())
-        a1.mutation.mutate(genotype)
+        if random.random() < 0.6:
+            a1.mutation.mutate(genotype)
         a1.parent.add_agent(EmasAgent(genotype, energy))
 

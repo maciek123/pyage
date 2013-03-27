@@ -49,12 +49,12 @@ class Agent(Addressable, AbstractAgent):
         self.__migrate()
 
     def __send_genotype(self):
-        if random.random() < 0.01:
+        if random.random() < 0.05:
             try:
                 neighbour = self.locator.get_neighbour(self)
                 if neighbour:
                     logger.debug("neighbour: %s", neighbour.get_address())
-                    probe = list(self.population.sort(key=lambda g: g.fitness))[:20:2]
+                    probe = list(self.population.sort(key=lambda g: g.fitness))[:10:2]
                     neighbour.add_genotype(probe)
             except:
                 logging.exception('')

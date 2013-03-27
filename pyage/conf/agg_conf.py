@@ -13,12 +13,13 @@ from pyage.solutions.evolution.mutation import UniformPointMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = aggregate_agents_factory("aggregate")
-aggregated_agents = agents_factory("max", "makz", "m")
-step_limit = lambda: 1000
+aggregated_agents = agents_factory("max", "makz", "m", "a")
+step_limit = lambda: 100
 
-operators = lambda: [RastriginEvaluation(), TournamentSelection(size=250, tournament_size=50),
-                     AverageCrossover(size=1000), UniformPointMutation(0.3, 100)]
-initializer = lambda: PointInitializer(1000, -100, 100)
+size = 50
+operators = lambda: [RastriginEvaluation(), TournamentSelection(25, tournament_size=20),
+                     AverageCrossover(size=size), UniformPointMutation(0.4, 100)]
+initializer = lambda: PointInitializer(size, -10, 1000)
 
 address_provider = address.AddressProvider
 
