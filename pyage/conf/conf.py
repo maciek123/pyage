@@ -27,6 +27,7 @@ migration = NoMigration
 locator = Pyro4Locator
 
 ns_hostname = lambda: "192.168.0.103"
-pyro_daemon = Pyro4.Daemon(ns_hostname())
+pyro_daemon = Pyro4.Daemon()
+#pyro_daemon = Pyro4.Daemon(ns_hostname())
 daemon = lambda: pyro_daemon
 stats = SimpleStatistics

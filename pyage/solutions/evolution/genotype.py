@@ -13,5 +13,14 @@ class PointGenotype(object):
 
 
 
+class FloatGenotype(object):
+    def __init__(self, genes):
+        super(FloatGenotype, self).__init__()
+        self.fitness = None
+        self.genes = genes
 
+    def __str__(self):
+        return "%s, f:%s" % (self.genes, self.fitness)
 
+    def __repr__(self):
+        return self.__str__()
