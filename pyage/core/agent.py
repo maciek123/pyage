@@ -44,7 +44,6 @@ class Agent(Addressable, AbstractAgent):
         self.steps += 1
         logger.debug("%s %s %s", self.steps, self.address, self.get_fitness())
         for o in self.operators:
-            logger.debug(self.population)
             o.process(self.population)
         self.__send_genotype()
         self.__migrate()
