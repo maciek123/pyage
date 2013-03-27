@@ -23,7 +23,9 @@ if __name__ == '__main__':
     Pyro4.config.COMMTIMEOUT = 1
     while not workspace.stopped:
         workspace.step()
-        if sys.argv[2]:
+        try:
             sleep(float(sys.argv[2]))
+        except IndexError:
+            pass
     workspace.daemon.close()
 

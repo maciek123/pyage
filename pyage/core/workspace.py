@@ -23,12 +23,13 @@ class Workspace(Addressable):
 
     def step(self):
         self.steps += 1
+        logger.debug("=========STEP %s=============", self.steps)
         for agent in self.__agents.values():
             agent.step()
         self.stats.update(self.steps, self.__agents.values())
         if self.steps > self.step_limit:
             self.stopped = True
-            self.stats.summarize()
+            self.stats.summarize(self.__agents.values())
 
     def publish_agents(self):
         for agent in self.__agents.values():

@@ -7,7 +7,7 @@ class AddressProvider(object):
         super(AddressProvider, self).__init__()
 
     def generate_address(self, obj):
-        return str(hash(obj))
+        return str(hash(obj))  + "." + socket.gethostname() + "." + str(os.getpid())
 
 
 class Addressable(object):
@@ -18,3 +18,6 @@ class Addressable(object):
             self.address = self.name + "." + socket.gethostname() + "." + str(os.getpid())
         else:
             self.address = self.address_provider.generate_address(self)
+
+    def get_address(self):
+        return self.address

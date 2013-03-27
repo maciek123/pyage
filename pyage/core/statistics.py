@@ -11,7 +11,8 @@ class SimpleStatistics(object):
     def update(self, step_count, agents):
         self.history.append(max(a.get_fitness() for a in agents))
 
-    def summarize(self):
+    def summarize(self, agents):
         logger.debug(self.history)
-        pylab.plot(self.history[5::2])
+        logger.debug("best genotype: %s", max(agents, key=lambda a:a.get_fitness).get_best_genotype())
+        pylab.plot(self.history[5:])
         pylab.savefig('plot.png')

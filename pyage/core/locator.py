@@ -36,5 +36,4 @@ class ParentLocator(object):
     def get_neighbour(self, agent):
         siblings = list(agent.parent.get_agents())
         siblings.remove(agent)
-        logger.debug([s.get_address() for s in siblings])
         return random.choice(siblings)
