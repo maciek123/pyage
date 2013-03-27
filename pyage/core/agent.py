@@ -1,4 +1,5 @@
 import logging
+import random
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
 
@@ -33,7 +34,7 @@ class Agent(Addressable, AbstractAgent):
     def __init__(self, name=None):
         self.name = name
         super(Agent, self).__init__()
-        print "address:", self.address
+        logger.debug("address:" + self.address)
         self.population = []
         self.validate_operators()
         self.initialize()
@@ -41,18 +42,18 @@ class Agent(Addressable, AbstractAgent):
 
     def step(self):
         self.steps += 1
-        print self.steps, self.address, self.get_fitness()
+        logger.debug("%s %s %s",self.steps, self.address, self.get_fitness())
         for o in self.operators:
             o.process(self.population)
         self.__send_genotype()
         self.__migrate()
 
     def __send_genotype(self):
-        if self.steps % 10 == 0:
+        if random.random() < 0.01:
             try:
                 neighbour = self.locator.get_neighbour(self)
                 if neighbour:
-                    print "neighbour: ", neighbour.get_address(), self.population
+                    logger.debug("neighbour: %s", neighbour.get_address())
                     probe = list(self.population[::5])
                     neighbour.add_genotype(probe)
             except:
@@ -87,6 +88,9 @@ class AggregateAgent(Addressable, AbstractAgent):
 
     def get_agents(self):
         return self.__agents.values()
+
+    def get_fitness(self):
+        return max(agent.get_fitness() for agent in self.__agents.values())
 
 
 def agents_factory(*args):
