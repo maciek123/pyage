@@ -3,6 +3,7 @@ import Pyro4
 
 from pyage.core import address
 from pyage.core.agent import  agents_factory, aggregate_agents_factory
+from pyage.core.emas import EmasService
 from pyage.core.locator import  ParentLocator
 from pyage.core.migration import Pyro4Migration
 from pyage.core.statistics import SimpleStatistics
@@ -14,9 +15,16 @@ from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = aggregate_agents_factory("aggregate")
 
-step_limit = lambda: 100
+step_limit = lambda: 1000
 
 aggregated_agents = lambda: emas_initializer(energy=10, size=1000, lowerbound=-100, upperbound=100)
+
+emas = EmasService
+
+minimal_energy = lambda: 2
+reproduction_minimum = lambda: 12
+migration_minimum = lambda: 12
+newborn_energy = lambda: 10
 
 evaluation = RastriginEvaluation
 crossover = AverageCrossover

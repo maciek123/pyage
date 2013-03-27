@@ -44,6 +44,7 @@ class Agent(Addressable, AbstractAgent):
         self.steps += 1
         logger.debug("%s %s %s", self.steps, self.address, self.get_fitness())
         for o in self.operators:
+            logger.debug(self.population)
             o.process(self.population)
         self.__send_genotype()
         self.__migrate()
@@ -61,73 +62,6 @@ class Agent(Addressable, AbstractAgent):
 
     def __migrate(self):
         self.migration.migrate(self)
-
-
-class EmasAgent(Addressable):
-    @Inject("locator", "migration", "evaluation", "crossover", "mutation")
-    def __init__(self, genotype, energy, name=None):
-        self.name = name
-        super(EmasAgent, self).__init__()
-        self.genotype = genotype
-        self.energy = energy
-        self.steps = 0
-        self.evaluation.process([genotype])
-
-    def step(self):
-        self.steps += 1
-        logger.debug("%s %s %s %s", self.steps, self.address, self.get_fitness(), self.energy)
-        try:
-            neighbour = self.locator.get_neighbour(self)
-            if neighbour:
-                logger.debug("neighbour: %s", neighbour.get_address())
-                if self.energy < 2:
-                    self.death(neighbour)
-                elif self.energy > 12 and neighbour.get_energy() > 12:
-                    self.reproduce(neighbour)
-                elif self.energy > 10:
-                    self.migration.migrate(self)
-                else:
-                    self.meet(neighbour)
-        except:
-            logging.exception('')
-
-    def get_fitness(self):
-        return self.genotype.fitness
-
-    def get_best_genotype(self):
-        return self.genotype
-
-    def add_energy(self, energy):
-        self.energy += energy
-
-    def get_energy(self):
-        return self.energy
-
-    def get_genotype(self):
-        return self.genotype
-
-    def meet(self, neighbour):
-        if self.get_fitness() > neighbour.get_fitness():
-            self.energy += 1
-            neighbour.add_energy(-1)
-        elif self.get_fitness() < neighbour.get_fitness():
-            self.energy -= 1
-            neighbour.add_energy(1)
-
-    def death(self, neighbour):
-        neighbour.add_energy(self.energy)
-        self.energy = 0
-        self.parent.remove_agent(self)
-
-    def reproduce(self, neighbour):
-        logger.debug("reproducing!")
-        energy = 10
-        self.energy -= 5
-        neighbour.add_energy(-5)
-        genotype = self.crossover.cross(self.genotype, neighbour.get_genotype())
-        self.mutation.mutate(genotype)
-        self.parent.add_agent(EmasAgent(genotype, energy))
-
 
 class AggregateAgent(Addressable, AbstractAgent):
     @Inject("aggregated_agents:_AggregateAgent__agents")

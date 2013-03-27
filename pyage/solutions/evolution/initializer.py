@@ -1,5 +1,5 @@
 from random import uniform
-from pyage.core.agent import EmasAgent
+from pyage.core.emas import EmasAgent
 from pyage.core.operator import Operator
 from pyage.solutions.evolution.genotype import PointGenotype
 
