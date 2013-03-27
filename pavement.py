@@ -8,7 +8,7 @@ setup(
     name="pyage",
     description="Python Agent-based evolution",
     packages=find_packages(),
-    version="0.3",
+    version="0.4",
     author="Maciej Kaziród",
     author_email="kmaciej@student.agh.edu.pl"
 )

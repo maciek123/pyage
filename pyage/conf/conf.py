@@ -6,6 +6,7 @@ from pyage.core.agent import  agents_factory
 from pyage.core.locator import Pyro4Locator
 from pyage.core.migration import  NoMigration
 from pyage.core.operator import Operator
+from pyage.core.statistics import SimpleStatistics
 from pyage.solutions.evolution.crossover import AverageCrossover
 from pyage.solutions.evolution.evaluation import RastriginEvaluation
 from pyage.solutions.evolution.initializer import PointInitializer
@@ -28,3 +29,4 @@ locator = Pyro4Locator
 ns_hostname = lambda: "192.168.0.103"
 pyro_daemon = Pyro4.Daemon(ns_hostname())
 daemon = lambda: pyro_daemon
+stats = SimpleStatistics

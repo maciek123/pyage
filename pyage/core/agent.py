@@ -54,7 +54,7 @@ class Agent(Addressable, AbstractAgent):
                 neighbour = self.locator.get_neighbour(self)
                 if neighbour:
                     logger.debug("neighbour: %s", neighbour.get_address())
-                    probe = list(self.population[::5])
+                    probe = list(self.population.sort(key=lambda g:g.fitness))[:20:2]
                     neighbour.add_genotype(probe)
             except:
                 logging.exception('')

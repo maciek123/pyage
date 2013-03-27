@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 WORKSPACE = "workspace"
 
 class Workspace(Addressable):
-    @Inject("agents:_Workspace__agents", "migration", "ns_hostname", "daemon", "step_limit")
+    @Inject("agents:_Workspace__agents", "migration", "ns_hostname", "daemon", "step_limit", "stats")
     def __init__(self):
         super(Workspace, self).__init__()
         self.steps = 0
@@ -25,8 +25,10 @@ class Workspace(Addressable):
         self.steps += 1
         for agent in self.__agents.values():
             agent.step()
+        self.stats.update(self.steps, self.__agents.values())
         if self.steps > self.step_limit:
             self.stopped = True
+            self.stats.summarize()
 
     def publish_agents(self):
         for agent in self.__agents.values():
