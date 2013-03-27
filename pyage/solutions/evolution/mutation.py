@@ -31,6 +31,6 @@ class UniformFloatMutation(AbstractMutation):
 
 
     def mutate(self, genotype):
-        genotype.genes = [g if random.random() < 0.6 else g + random.uniform(-self.radius, self.radius) for g in
-                          genotype.genes]
+        index = random.randint(0, len(genotype.genes) - 1)
+        genotype.genes[index] += random.uniform(-self.radius, self.radius)
 
