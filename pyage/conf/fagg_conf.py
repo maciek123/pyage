@@ -15,7 +15,7 @@ from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = generate_agents("agent", int(os.environ['AGENTS']), AggregateAgent)
 aggregated_agents = unnamed_agents(4, Agent)
-step_limit = lambda: 1000
+step_limit = lambda: 10
 
 size = 1000
 operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=150, tournament_size=150),
