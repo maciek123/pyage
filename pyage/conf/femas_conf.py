@@ -16,7 +16,7 @@ from pyage.solutions.evolution.mutation import  UniformFloatMutation
 
 agents = unnamed_agents(int(os.environ['AGENTS']), AggregateAgent)
 
-step_limit = lambda: 1000
+step_limit = lambda: 500
 
 aggregated_agents = lambda: float_emas_initializer(10, energy=10, size=500, lowerbound=-100, upperbound=100)
 
