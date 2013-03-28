@@ -41,6 +41,15 @@ class Workspace(Addressable):
             except:
                 logger.debug("could not locate nameserver")
 
+    def unregister_agents(self):
+        for agent in self.__agents.values():
+            try:
+                ns = locateNS(self.ns_hostname)
+                ns.remove(prefix=AGENT)
+                logger.debug(ns.list())
+            except:
+                logger.debug("could not locate nameserver")
+
     def get_agent(self, address):
         return self.__agents[address]
 
@@ -55,6 +64,14 @@ class Workspace(Addressable):
         try:
             ns = locateNS(self.ns_hostname)
             ns.register(WORKSPACE + '.' + self.address, uri)
+            logger.debug(ns.list())
+        except:
+            logger.debug("could not locate nameserver")
+
+    def unregister(self):
+        try:
+            ns = locateNS(self.ns_hostname)
+            ns.remove(WORKSPACE + '.' + self.address)
             logger.debug(ns.list())
         except:
             logger.debug("could not locate nameserver")
