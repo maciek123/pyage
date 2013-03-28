@@ -65,6 +65,7 @@ class Agent(Addressable, AbstractAgent):
     def __migrate(self):
         self.migration.migrate(self)
 
+
 class AggregateAgent(Addressable, AbstractAgent):
     @Inject("aggregated_agents:_AggregateAgent__agents")
     def __init__(self, name=None):
@@ -109,6 +110,17 @@ def agents_factory(*args):
     return factory
 
 
+def generate_agents(prefix, count, type):
+    def factory():
+        agents = {}
+        for i in range(count):
+            agent = type(prefix + str(i))
+            agents[agent.get_address()] = agent
+        return agents
+
+    return factory
+
+
 def aggregate_agents_factory(*args):
     def factory():
         agents = {}
@@ -118,3 +130,4 @@ def aggregate_agents_factory(*args):
         return agents
 
     return factory
+

@@ -12,10 +12,6 @@ class Pyro4Locator(object):
     def __init__(self):
         super(Pyro4Locator, self).__init__()
 
-    def list_workspaces(self):
-        ns = Pyro4.locateNS()
-        return ns.list("workspace")
-
     def get_neighbour(self, agent):
         try:
             random_agent = self.__get_random_agent(agent)
