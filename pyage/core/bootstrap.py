@@ -15,7 +15,6 @@ if __name__ == '__main__':
     inject.config = sys.argv[1]
     logging.debug("config: %s", inject.config)
     workspace = Workspace()
-    workspace.unregister_agents()
     workspace.publish()
     workspace.publish_agents()
     logger.debug(workspace.address)
