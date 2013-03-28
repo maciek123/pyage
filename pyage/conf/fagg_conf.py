@@ -3,7 +3,7 @@ import os
 import Pyro4
 
 from pyage.core import address
-from pyage.core.agent import  agents_factory, generate_agents, AggregateAgent
+from pyage.core.agent import   generate_agents, AggregateAgent, unnamed_agents, Agent
 from pyage.core.locator import  ParentLocator
 from pyage.core.migration import Pyro4Migration
 from pyage.core.statistics import SimpleStatistics
@@ -14,7 +14,7 @@ from pyage.solutions.evolution.mutation import  UniformFloatMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = generate_agents("agent", int(os.environ['AGENTS']), AggregateAgent)
-aggregated_agents = agents_factory("max", "makz", "m", "a")
+aggregated_agents = unnamed_agents(4, Agent)
 step_limit = lambda: 1000
 
 size = 1000

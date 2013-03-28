@@ -93,7 +93,10 @@ class AggregateAgent(Addressable, AbstractAgent):
         return self.__agents.values()
 
     def get_fitness(self):
-        return max(agent.get_fitness() for agent in self.__agents.values())
+        try:
+            return max(agent.get_fitness() for agent in self.__agents.values())
+        except ValueError:
+            return None
 
     def get_best_genotype(self):
         return max(self.__agents.values(), key=lambda a: a.get_fitness()).get_best_genotype()
@@ -115,6 +118,17 @@ def generate_agents(prefix, count, type):
         agents = {}
         for i in range(count):
             agent = type(prefix + str(i))
+            agents[agent.get_address()] = agent
+        return agents
+
+    return factory
+
+
+def unnamed_agents(count, type):
+    def factory():
+        agents = {}
+        for i in range(count):
+            agent = type()
             agents[agent.get_address()] = agent
         return agents
 
