@@ -9,10 +9,16 @@ class SimpleStatistics(object):
         self.history = []
 
     def update(self, step_count, agents):
-        self.history.append(max(a.get_fitness() for a in agents))
+        try:
+            self.history.append(max(a.get_fitness() for a in agents))
+        except:
+            logging.exception("")
 
     def summarize(self, agents):
-        logger.debug(self.history)
-        logger.debug("best genotype: %s", max(agents, key=lambda a:a.get_fitness).get_best_genotype())
-        pylab.plot(self.history[4:])
-        pylab.savefig('plot.png')
+        try:
+            logger.debug(self.history)
+            logger.debug("best genotype: %s", max(agents, key=lambda a:a.get_fitness).get_best_genotype())
+            pylab.plot(self.history[4:])
+            pylab.savefig('plot.png')
+        except:
+            logging.exception("")

@@ -36,8 +36,8 @@ def run_evolution(agents_count, ns_hostname):
 def aggregate():
 	hosts = ['localhost:' + str(port) for port in range(9000, 9018)]
 	ns = ['172.16.145.101', '172.16.145.104', '172.16.145.106', '172.16.145.160', '172.16.145.161']
-	agents_count = 8
-	for i in range(1,5):
+	agents_count = 4
+	for i in range(2,5):
 		h = hosts[:2**i]
 		execute(run_aggregate, agents_count, ns[0], hosts=h)
 		agents_count /= 2
