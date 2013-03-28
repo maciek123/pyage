@@ -33,6 +33,12 @@ class FloatInitializer(Operator):
     def __randomize(self):
         return uniform(self.lowerbound, self.upperbound)
 
+def float_emas_initializer(dims=2,energy=10, size=100, lowerbound=0.0, upperbound=1.0):
+    agents = {}
+    for i in range(size):
+        agent = EmasAgent(FloatGenotype([uniform(lowerbound, upperbound) for _ in range(dims)]), energy)
+        agents[agent.get_address()] = agent
+    return agents
 
 def emas_initializer(energy=10, size=100, lowerbound=0.0, upperbound=1.0):
     agents = {}
