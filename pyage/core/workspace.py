@@ -45,7 +45,7 @@ class Workspace(Addressable):
         for agent in self.__agents.values():
             try:
                 ns = locateNS(self.ns_hostname)
-                ns.remove(prefix=AGENT)
+                ns.remove('%s.%s' % (AGENT, agent.address))
                 logger.debug(ns.list())
             except:
                 logger.debug("could not locate nameserver")
