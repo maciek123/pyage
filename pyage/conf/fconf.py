@@ -14,7 +14,7 @@ from pyage.solutions.evolution.mutation import  UniformFloatMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
 agents = generate_agents("agent", int(os.environ['AGENTS']), Agent)
-step_limit = lambda: 1000
+step_limit = lambda: 750
 
 size = 1000
 operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=250, tournament_size=250),
