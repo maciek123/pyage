@@ -1,4 +1,5 @@
 # coding=utf-8
+import logging
 import os
 import Pyro4
 
@@ -13,14 +14,19 @@ from pyage.solutions.evolution.initializer import  FloatInitializer
 from pyage.solutions.evolution.mutation import  UniformFloatMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
-agents = generate_agents("agent", int(os.environ['AGENTS']), AggregateAgent)
-aggregated_agents = unnamed_agents(4, Agent)
-step_limit = lambda: 1000
+logger = logging.getLogger(__name__)
 
-size = 1000
-operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=150, tournament_size=150),
-                     AverageFloatCrossover(size=size), UniformFloatMutation(probability=0.1, radius=1)]
-initializer = lambda: FloatInitializer(10, size, -10, 10)
+agents_count = int(os.environ['AGENTS'])
+logger.debug("AGGREGATE, %s agents", agents_count)
+
+agents = generate_agents("agent", agents_count, AggregateAgent)
+aggregated_agents = unnamed_agents(2, Agent)
+step_limit = lambda: 600
+
+size = 600
+operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=150, tournament_size=200),
+                     AverageFloatCrossover(size=size), UniformFloatMutation(probability=0.05, radius=1)]
+initializer = lambda: FloatInitializer(20, size, -10, 10)
 
 address_provider = address.AddressProvider
 

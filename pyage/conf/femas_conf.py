@@ -1,4 +1,5 @@
 # coding=utf-8
+import logging
 import os
 import Pyro4
 
@@ -14,7 +15,11 @@ from pyage.solutions.evolution.initializer import  float_emas_initializer
 from pyage.solutions.evolution.mutation import  UniformFloatMutation
 
 
-agents = unnamed_agents(int(os.environ['AGENTS']), AggregateAgent)
+logger = logging.getLogger(__name__)
+
+agents_count = int(os.environ['AGENTS'])
+logger.debug("AGGREGATE, %s agents", agents_count)
+agents = unnamed_agents(agents_count, AggregateAgent)
 
 step_limit = lambda: 500
 

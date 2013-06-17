@@ -18,7 +18,7 @@ class SimpleStatistics(object):
         try:
             logger.debug(self.history)
             logger.debug("best genotype: %s", max(agents, key=lambda a:a.get_fitness).get_best_genotype())
-            pylab.plot(self.history[4:])
+            pylab.plot(self.history[99:])
             pylab.savefig('plot.png')
         except:
             logging.exception("")

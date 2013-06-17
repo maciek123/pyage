@@ -1,4 +1,5 @@
 # coding=utf-8
+import logging
 import os
 import Pyro4
 
@@ -13,7 +14,12 @@ from pyage.solutions.evolution.initializer import  FloatInitializer
 from pyage.solutions.evolution.mutation import  UniformFloatMutation
 from pyage.solutions.evolution.selection import TournamentSelection
 
-agents = generate_agents("agent", int(os.environ['AGENTS']), Agent)
+logger = logging.getLogger(__name__)
+
+agents_count = int(os.environ['AGENTS'])
+logger.debug("AGGREGATE, %s agents", agents_count)
+
+agents = generate_agents("agent", agents_count, Agent)
 step_limit = lambda: 750
 
 size = 1000

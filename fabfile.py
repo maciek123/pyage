@@ -1,4 +1,5 @@
 from fabric.api import *
+import os
 
 
 def host_type():
@@ -25,7 +26,6 @@ def evolution():
 		h = hosts[:2**i]
 		execute(run_evolution, agents_count, ns[0], hosts=h)
 		agents_count /= 2
-		raw_input("press enter")
 
 @parallel
 def run_evolution(agents_count, ns_hostname):
@@ -36,8 +36,8 @@ def run_evolution(agents_count, ns_hostname):
 def aggregate():
 	hosts = ['localhost:' + str(port) for port in range(9000, 9018)]
 	ns = ['172.16.145.101', '172.16.145.104', '172.16.145.106', '172.16.145.160', '172.16.145.161']
-	agents_count = 4
-	for i in range(2,5):
+	agents_count = 16 
+	for i in range(5):
 		h = hosts[:2**i]
 		execute(run_aggregate, agents_count, ns[0], hosts=h)
 		agents_count /= 2
@@ -65,17 +65,15 @@ def run_emas(agents_count, ns_hostname):
 def logs():
 	execute(get_logs, hosts = ['localhost:' + str(port) for port in range(9000, 9018)])
 
+@parallel
 def get_logs():
 	get("/home/makz/pyage*.log", "logs/"+env.host_string+"/")
 
-def ns():
-	execute(run_ns, hosts = ['localhost:9001'])
+def clean_logs():
+	execute(rm_logs, hosts = ['localhost:' + str(port) for port in range(9000, 9018)])
 
-def run_ns():
-	run("./run_ns.sh")
+@parallel
+def rm_logs():
+	for file in os.listdir("logs/"+env.host_string+"/"):
+		run("rm " + file)	
 
-def killns():
-	execute(kill_ns, hosts = ['localhost:9001'])
-
-def kill_ns():
-	run("kill `cat pid`")
