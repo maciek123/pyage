@@ -1,7 +1,9 @@
 from datetime import datetime
 import logging
+import os
 import threading
 from time import sleep, time
+import urllib2
 import Pyro4
 import sys
 from pyage.core import inject
@@ -28,7 +30,15 @@ if __name__ == '__main__':
             sleep(float(sys.argv[2]))
         except IndexError:
             pass
-    logger.debug("elapsed time: %s seconds",time() - start_time)
+    try:
+        time = time() - start_time
+        logger.debug("elapsed time: %s seconds", time)
+        url = "http://student.agh.edu.pl/~kmaciej/pyage.php?time=%s&agents=%s&conf=%s" % (
+        time, os.environ['AGENTS'], sys.argv[1])
+        logger.debug(url)
+        urllib2.urlopen(url)
+    except:
+        logger.exception("could not open url")
     workspace.daemon.close()
     workspace.unregister_agents()
     workspace.unregister()
