@@ -21,9 +21,9 @@ agents_count = int(os.environ['AGENTS'])
 logger.debug("AGGREGATE, %s agents", agents_count)
 agents = unnamed_agents(agents_count, AggregateAgent)
 
-step_limit = lambda: 500
+step_limit = lambda: 200
 
-aggregated_agents = lambda: float_emas_initializer(10, energy=10, size=500, lowerbound=-100, upperbound=100)
+aggregated_agents = lambda: float_emas_initializer(10, energy=10, size=150, lowerbound=-100, upperbound=100)
 
 emas = EmasService
 

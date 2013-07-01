@@ -20,10 +20,10 @@ agents_count = int(os.environ['AGENTS'])
 logger.debug("AGGREGATE, %s agents", agents_count)
 
 agents = generate_agents("agent", agents_count, Agent)
-step_limit = lambda: 750
+step_limit = lambda: 500
 
-size = 1000
-operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=250, tournament_size=250),
+size = 500
+operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=125, tournament_size=125),
                      AverageFloatCrossover(size=size), UniformFloatMutation(probability=0.1, radius=1)]
 initializer = lambda: FloatInitializer(10, size, -10, 10)
 
