@@ -2,18 +2,23 @@ import logging
 from Pyro4 import locateNS
 from pyage.core.address import Addressable
 from inject import Inject
-from pyage.core.agent import AGENT
+from pyage.core.agent.agent import AGENT
+import signal
 
 logger = logging.getLogger(__name__)
 
-WORKSPACE = "workspace"
+WORKSPACE = "workplace"
 
-class Workspace(Addressable):
-    @Inject("agents:_Workspace__agents", "migration", "ns_hostname", "daemon", "step_limit", "stats")
+class Workplace(Addressable):
+    @Inject("agents:_Workplace__agents", "migration", "ns_hostname", "daemon", "stop_condition", "stats")
     def __init__(self):
-        super(Workspace, self).__init__()
+        super(Workplace, self).__init__()
         self.steps = 0
         self.stopped = False
+        def signal_handler(signal, frame):
+            print 'You pressed Ctrl+C!'
+            self.stop()
+        signal.signal(signal.SIGINT, signal_handler)
 
     def get_agents(self):
         return self.__agents.values()
@@ -21,15 +26,22 @@ class Workspace(Addressable):
     def ping(self):
         return "pong"
 
+    def stop(self):
+        self.stopped = True
+        self.stats.summarize(self.__agents.values())
+
     def step(self):
         self.steps += 1
         logger.info("=========STEP %s=============", self.steps)
         for agent in self.__agents.values():
             agent.step()
         self.stats.update(self.steps, self.__agents.values())
-        if self.steps > self.step_limit:
-            self.stopped = True
-            self.stats.summarize(self.__agents.values())
+        if self.stop_condition.should_stop(self):
+            self.stop()
+
+    def get_fitness(self):
+        return max(a.get_fitness() for a in self.get_agents())
+
 
     def publish_agents(self):
         for agent in self.__agents.values():

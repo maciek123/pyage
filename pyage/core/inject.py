@@ -1,5 +1,6 @@
 config = None
 
+#TODO refactor
 class Inject(object):
     def __init__(self, *args):
         """
@@ -30,6 +31,29 @@ class Inject(object):
                 except:
                     attr = getattr(conf, conf_arg_name)()
                 setattr(args[0], property_name, attr)
+            f(*args)
+
+        return wrapped_f
+
+
+class InjectOptional(Inject):
+    def __init__(self, *args):
+        super(InjectOptional, self).__init__(*args)
+
+    def __call__(self, f):
+        def wrapped_f(*args):
+            try:
+                conf = self.read_config(config)
+                for arg in self.args:
+                    conf_arg_name = arg.split(":")[0]
+                    property_name = arg.split(":")[-1]
+                    try:
+                        attr = getattr(conf, args[0].address.split('.')[0] + '__' + conf_arg_name)()
+                    except:
+                        attr = getattr(conf, conf_arg_name)()
+                    setattr(args[0], property_name, attr)
+            except:
+                pass #parameter is not mandatory
             f(*args)
 
         return wrapped_f

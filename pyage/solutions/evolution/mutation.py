@@ -25,7 +25,7 @@ class UniformPointMutation(AbstractMutation):
 
 
 class UniformFloatMutation(AbstractMutation):
-    def __init__(self, probability=0.1, radius=100.5):
+    def __init__(self, probability=0.1, radius=0.5):
         super(UniformFloatMutation, self).__init__(FloatGenotype, probability)
         self.radius = radius
 

@@ -6,7 +6,7 @@ from pyage.core.inject import Inject
 logger = logging.getLogger(__name__)
 
 class EmasAgent(Addressable):
-    @Inject("locator", "migration", "evaluation", "crossover", "mutation", "emas")
+    @Inject("locator", "migration", "evaluation", "crossover", "mutation", "emas", "transferred_energy")
     def __init__(self, genotype, energy, name=None):
         self.name = name
         super(EmasAgent, self).__init__()
@@ -17,11 +17,11 @@ class EmasAgent(Addressable):
 
     def step(self):
         self.steps += 1
-        logger.debug("%s %s %s %s", self.steps, self.address, self.get_fitness(), self.energy)
+ #       logger.debug("%s %s %s %s", self.steps, self.address, self.get_fitness(), self.energy)
         try:
             neighbour = self.locator.get_neighbour(self)
             if neighbour:
-                logger.debug("neighbour: %s", neighbour.get_address())
+#                logger.debug("neighbour: %s", neighbour.get_address())
                 if self.emas.should_die(self):
                     self.death(neighbour)
                 elif self.emas.should_reproduce(self, neighbour):
@@ -49,19 +49,21 @@ class EmasAgent(Addressable):
         return self.genotype
 
     def meet(self, neighbour):
+        logger.debug(str(self) + "meets" + str(neighbour))
         if self.get_fitness() > neighbour.get_fitness():
-            self.energy += 1
-            neighbour.add_energy(-1)
+            transfered_energy = min(self.transferred_energy, neighbour.energy)
+            self.energy += transfered_energy
+            neighbour.add_energy(-transfered_energy)
         elif self.get_fitness() < neighbour.get_fitness():
-            self.energy -= 1
-            neighbour.add_energy(1)
+            transfered_energy = min(self.transferred_energy, self.energy)
+            self.energy -= transfered_energy
+            neighbour.add_energy(transfered_energy)
 
     def death(self, neighbour):
         neighbour.add_energy(self.energy)
         self.energy = 0
         self.parent.remove_agent(self)
-        logger.debug("died")
-
+        logger.debug(str(self) + "died")
 
 class EmasService(object):
     @Inject("minimal_energy", "reproduction_minimum", "migration_minimum", "newborn_energy")
@@ -69,21 +71,20 @@ class EmasService(object):
         super(EmasService, self).__init__()
 
     def should_die(self, agent):
-        return agent.get_energy() < self.minimal_energy
+        return agent.get_energy() <= self.minimal_energy
 
     def should_reproduce(self, a1, a2):
         return a1.get_energy() > self.reproduction_minimum and a2.get_energy() > self.reproduction_minimum
 
     def can_migrate(self, agent):
-        return agent.get_energy() < self.migration_minimum
+        return agent.get_energy() > self.migration_minimum and len(agent.parent.get_agents()) > 10
 
     def reproduce(self, a1, a2):
-        logger.debug("reproducing!")
+        logger.debug(str(a1) + " " + str(a2) + "reproducing!")
         energy = self.newborn_energy / 2 * 2
         a1.energy -= self.newborn_energy / 2
         a2.add_energy(-self.newborn_energy / 2)
         genotype = a1.crossover.cross(a1.genotype, a2.get_genotype())
-        if random.random() < 0.6:
-            a1.mutation.mutate(genotype)
+        a1.mutation.mutate(genotype)
         a1.parent.add_agent(EmasAgent(genotype, energy))
 

@@ -5,7 +5,7 @@ class Operator(object):
         self.required_type = type
 
     def process(self, population):
-        pass
+        raise NotImplementedError()
 
     def is_compatible(self, operator):
         return  self.required_type == None\

@@ -1,12 +1,16 @@
 import logging
 import random
 import Pyro4
-from pyage.core.agent import AGENT
+from pyage.core.agent.agent import AGENT
 from pyage.core.inject import Inject
 
 logger = logging.getLogger(__name__)
 
-class Pyro4Migration(object):
+class Migration(object):
+    def migrate(self, agent):
+        raise NotImplementedError()
+
+class Pyro4Migration(Migration):
     @Inject("ns_hostname")
     def __init__(self):
         super(Pyro4Migration, self).__init__()
@@ -29,6 +33,6 @@ class Pyro4Migration(object):
         return Pyro4.Proxy(random.choice(agents.values()))
 
 
-class NoMigration(object):
+class NoMigration(Migration):
     def migrate(self, agent):
         pass

@@ -1,6 +1,5 @@
 # coding=utf-8
 from paver.easy import *
-import paver.doctools
 from paver.setuputils import setup
 from setuptools import find_packages
 
@@ -8,9 +7,10 @@ setup(
     name="pyage",
     description="Python Agent-based evolution",
     packages=find_packages(),
-    version="0.8.8",
+    version="0.9.0",
     author="Maciej Kaziród",
-    author_email="kmaciej@student.agh.edu.pl"
+    author_email="kmaciej@student.agh.edu.pl",
+    requires=['Pyro4==4.17']
 )
 
 

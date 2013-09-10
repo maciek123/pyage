@@ -3,11 +3,15 @@ import socket
 from pyage.core.inject import Inject
 
 class AddressProvider(object):
+    def generate_address(self, obj):
+        raise NotImplementedError()
+
+class HashAddressProvider(AddressProvider):
     def __init__(self):
-        super(AddressProvider, self).__init__()
+        super(HashAddressProvider, self).__init__()
 
     def generate_address(self, obj):
-        return str(hash(obj))  + "." + socket.gethostname() + "." + str(os.getpid())
+        return str(hash(obj)) + "." + socket.gethostname() + "." + str(os.getpid())
 
 
 class Addressable(object):
