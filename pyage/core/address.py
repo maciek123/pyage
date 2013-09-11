@@ -6,13 +6,16 @@ class AddressProvider(object):
     def generate_address(self, obj):
         raise NotImplementedError()
 
-class HashAddressProvider(AddressProvider):
+counter = 0
+
+class SequenceAddressProvider(AddressProvider):
     def __init__(self):
-        super(HashAddressProvider, self).__init__()
+        super(SequenceAddressProvider, self).__init__()
 
     def generate_address(self, obj):
-        return str(hash(obj)) + "." + socket.gethostname() + "." + str(os.getpid())
-
+        global counter
+        counter += 1
+        return str(counter) + "." + socket.gethostname() + "." + str(os.getpid())
 
 class Addressable(object):
     @Inject("address_provider")
