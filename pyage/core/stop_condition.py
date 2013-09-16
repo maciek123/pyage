@@ -9,7 +9,7 @@ class StepLimitStopCondition(StopCondition):
         self.step_limit = step_limit
 
     def should_stop(self, workplace):
-        return 0 < self.step_limit < workplace.steps
+        return 0 < self.step_limit <= workplace.steps
 
 
 class MinimumFitnessStopCondition(StopCondition):
@@ -18,4 +18,4 @@ class MinimumFitnessStopCondition(StopCondition):
         self.minimal_fitness = minimal_fitness
 
     def should_stop(self, workplace):
-        return workplace.get_fitness() > self.minimal_fitness
+        return workplace.get_fitness() >= self.minimal_fitness
