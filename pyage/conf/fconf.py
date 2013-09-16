@@ -29,7 +29,7 @@ operators = lambda: [FloatRastriginEvaluation(), TournamentSelection(size=125, t
                      AverageFloatCrossover(size=size), UniformFloatMutation(probability=0.1, radius=1)]
 initializer = lambda: FloatInitializer(500, size, -10, 10)
 
-address_provider = address.HashAddressProvider
+address_provider = address.SequenceAddressProvider
 
 migration = NoMigration
 locator = Pyro4Locator
