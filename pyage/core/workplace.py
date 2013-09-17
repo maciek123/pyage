@@ -1,7 +1,7 @@
 import logging
 from Pyro4 import locateNS
 from pyage.core.address import Addressable
-from inject import Inject
+from inject import Inject, InjectOptional
 from pyage.core.agent.agent import AGENT
 import signal
 
@@ -10,14 +10,19 @@ logger = logging.getLogger(__name__)
 WORKSPACE = "workplace"
 
 class Workplace(Addressable):
-    @Inject("agents:_Workplace__agents", "migration", "ns_hostname", "daemon", "stop_condition", "stats")
+    @Inject("agents:_Workplace__agents", "migration", "stop_condition", "stats")
+    @InjectOptional("ns_hostname", "daemon")
     def __init__(self):
         super(Workplace, self).__init__()
+        for agent in self.__agents.values():
+            agent.parent = self
         self.steps = 0
         self.stopped = False
+
         def signal_handler(signal, frame):
             print 'You pressed Ctrl+C!'
             self.stop()
+
         signal.signal(signal.SIGINT, signal_handler)
 
     def get_agents(self):
@@ -72,13 +77,14 @@ class Workplace(Addressable):
         return agent
 
     def publish(self):
-        uri = self.daemon.register(self)
-        try:
-            ns = locateNS(self.ns_hostname)
-            ns.register(WORKSPACE + '.' + self.address, uri)
-            logger.debug(ns.list())
-        except:
-            logger.debug("could not locate nameserver")
+        if hasattr(self, "ns_hostname") and hasattr(self, "daemon"):
+            uri = self.daemon.register(self)
+            try:
+                ns = locateNS(self.ns_hostname)
+                ns.register(WORKSPACE + '.' + self.address, uri)
+                logger.debug(ns.list())
+            except:
+                logger.debug("could not locate nameserver")
 
     def unregister(self):
         try:

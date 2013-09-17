@@ -54,7 +54,7 @@ class Agent(Addressable, AbstractAgent):
                 neighbour = self.locator.get_neighbour(self)
                 if neighbour:
                     logger.debug("neighbour: %s", neighbour.get_address())
-                    self.population.sort
+                    self.population.sort()
                     sorted_population = list(self.population)
                     sorted_population.sort(key=lambda g: g.fitness)
                     probe = sorted_population[:20:2]

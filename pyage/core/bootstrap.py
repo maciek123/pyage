@@ -18,9 +18,10 @@ if __name__ == '__main__':
     workspace.publish()
     workspace.publish_agents()
     logger.debug(workspace.address)
-    thread = threading.Thread(target=workspace.daemon.requestLoop)
-    thread.setDaemon(True)
-    thread.start()
+    if hasattr(workspace, "daemon"):
+        thread = threading.Thread(target=workspace.daemon.requestLoop)
+        thread.setDaemon(True)
+        thread.start()
     Pyro4.config.COMMTIMEOUT = 1
     while not workspace.stopped:
         workspace.step()
@@ -33,6 +34,7 @@ if __name__ == '__main__':
         logger.debug("elapsed time: %s seconds", time)
     except:
         logger.exception("could not open url")
-    workspace.daemon.close()
+    if hasattr(workspace, "daemon"):
+        workspace.daemon.close()
     workspace.unregister_agents()
     workspace.unregister()

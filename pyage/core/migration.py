@@ -10,6 +10,7 @@ class Migration(object):
     def migrate(self, agent):
         raise NotImplementedError()
 
+
 class Pyro4Migration(Migration):
     @Inject("ns_hostname")
     def __init__(self):
@@ -31,6 +32,23 @@ class Pyro4Migration(Migration):
         logger.debug(agents)
         del agents[AGENT + "." + agent.parent.address]
         return Pyro4.Proxy(random.choice(agents.values()))
+
+
+class ParentMigration(Migration):
+    def migrate(self, agent):
+        try:
+            if random.random() > 0.95 and len(agent.parent.get_agents()) > 1 and len(
+                agent.parent.parent.get_agents()) > 1:
+                logger.debug("migrating!")
+                aggregate = self.__get_random_aggregate(agent)
+                logger.debug(aggregate.get_address())
+                aggregate.add_agent(agent.parent.remove_agent(agent))
+        except:
+            logging.exception("")
+
+    def __get_random_aggregate(self, agent):
+        siblings = list(agent.parent.parent.get_agents())
+        return random.choice(siblings)
 
 
 class NoMigration(Migration):

@@ -69,3 +69,11 @@ class TimeStatistics(SimpleStatistics):
         except:
             logging.exception("")
 
+
+class NoStatistics(Statistics):
+    def update(self, step_count, agents):
+        pass
+
+    def summarize(self, agents):
+        pass
+

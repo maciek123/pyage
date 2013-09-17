@@ -35,7 +35,8 @@ class Pyro4Locator(Locator):
 class ParentLocator(Locator):
     def get_neighbour(self, agent):
         siblings = list(agent.parent.get_agents())
-        #       logger.debug(len(siblings))
+        if len(siblings) < 2:
+            return None
         siblings.remove(agent)
         return random.choice(siblings)
 
@@ -45,3 +46,4 @@ class GridParentLocator(Locator):
         siblings = list(agent.parent.get_agents())
         index = siblings.index(agent)
         return random.choice(siblings[index - 2:index] + siblings[index + 1:index + 3])
+
