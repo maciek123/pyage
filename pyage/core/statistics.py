@@ -61,10 +61,10 @@ class TimeStatistics(SimpleStatistics):
             pylab.savefig('plot.png')
 
             if hasattr(self, "notification_url"):
-                url = self.notification_url + "?time = % s & agents = % s & conf = % s" % (
-                    time, os.environ['AGENTS'], sys.argv[1])
-                logger.debug(url)
-                urllib2.urlopen(url)
+                url = self.notification_url + "?time=%s&agents=%s&conf=%s" % (
+                    time.time() - self.start, os.environ['AGENTS'], sys.argv[1])
+            logger.info(url)
+            urllib2.urlopen(url)
 
         except:
             logging.exception("")
@@ -74,12 +74,13 @@ class NotificationStatistics(SimpleStatistics):
     @Inject("notification_url")
     def __init__(self):
         super(NotificationStatistics, self).__init__()
+        self.start = time.time()
 
     def summarize(self, agents):
         try:
-            url = self.notification_url + "?time = % s & agents = % s & conf = % s" % (
-                time, os.environ['AGENTS'], sys.argv[1])
-            logger.debug(url)
+            url = self.notification_url + "?time=%s&agents=%s&conf=%s" % (
+                time.time() - self.start, os.environ['AGENTS'], sys.argv[1])
+            logger.info(url)
             urllib2.urlopen(url)
 
         except:
