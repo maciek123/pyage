@@ -4,7 +4,7 @@ import urllib2
 import pylab
 import time
 import sys
-from pyage.core.inject import InjectOptional
+from pyage.core.inject import InjectOptional, Inject
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +65,22 @@ class TimeStatistics(SimpleStatistics):
                     time, os.environ['AGENTS'], sys.argv[1])
                 logger.debug(url)
                 urllib2.urlopen(url)
+
+        except:
+            logging.exception("")
+
+
+class NotificationStatistics(SimpleStatistics):
+    @Inject("notification_url")
+    def __init__(self):
+        super(NotificationStatistics, self).__init__()
+
+    def summarize(self, agents):
+        try:
+            url = self.notification_url + "?time = % s & agents = % s & conf = % s" % (
+                time, os.environ['AGENTS'], sys.argv[1])
+            logger.debug(url)
+            urllib2.urlopen(url)
 
         except:
             logging.exception("")
