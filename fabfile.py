@@ -12,7 +12,8 @@ def update():
 	execute(run_update, hosts = hosts)
 
 def run_update():
-	sudo('sudo easy_install -U pyage')
+    sudo('apt-get -y --no-upgrade install python-setuptools')
+    sudo('sudo easy_install -U pyage Pyro4==4.17')
 
 def matplotlib():
 	execute(run_matplotlib, hosts = hosts)
@@ -22,9 +23,16 @@ def run_matplotlib():
 	sudo('apt-get install libfreetype6-dev libpng-dev python-numpy gcc g++ python2.7-dev -y')
 	sudo('sudo easy_install matplotlib')
 
+def send_conf():
+    execute(send, hosts = hosts)
+
+def send():
+    put('pyage_conf', '~/')
+
+
 @parallel
 def evolution():
-	agents_count = 180 
+	agents_count = 180
 	for i in range(6,0,-1):
 		h = hosts[:i]
 		execute(run_evolution, agents_count/i, ns, hosts=h)
@@ -36,7 +44,7 @@ def run_evolution(agents_count, ns_hostname):
 
 @parallel
 def aggregate():
-	agents_count = 180 
+	agents_count = 180
 	for i in range(6,0,-1):
 		h = hosts[:i]
 		execute(run_aggregate, agents_count/i, ns, hosts=h)
@@ -48,8 +56,8 @@ def run_aggregate(agents_count, ns_hostname):
 
 @parallel
 def emas():
-	agents_count = 180 
-	for i in range(6,0,-1):
+	agents_count = 60
+	for i in range(len(hosts),0,-1):
 		h = hosts[:i]
 		execute(run_emas, agents_count/i, ns, hosts=h)
 
@@ -57,19 +65,4 @@ def emas():
 def run_emas(agents_count, ns_hostname):
 	with shell_env(AGENTS=str(agents_count),NS_HOSTNAME=ns_hostname):
 		run("export PYRO_HOST=$(ip addr show eth0 | grep -o 'inet [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | grep -o [0-9].*); python -m pyage.core.bootstrap pyage.conf.femas_conf")
-
-def logs():
-	execute(get_logs, hosts = ['localhost:' + str(port) for port in range(9000, 9018)])
-
-@parallel
-def get_logs():
-	get("/home/makz/pyage*.log", "logs/"+env.host_string+"/")
-
-def clean_logs():
-	execute(rm_logs, hosts = ['localhost:' + str(port) for port in range(9000, 9018)])
-
-@parallel
-def rm_logs():
-	for file in os.listdir("logs/"+env.host_string+"/"):
-		run("rm " + file)	
 
