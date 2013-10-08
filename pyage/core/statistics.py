@@ -63,8 +63,8 @@ class TimeStatistics(SimpleStatistics):
             if hasattr(self, "notification_url"):
                 url = self.notification_url + "?time=%s&agents=%s&conf=%s" % (
                     time.time() - self.start, os.environ['AGENTS'], sys.argv[1])
-            logger.info(url)
-            urllib2.urlopen(url)
+                logger.info(url)
+                urllib2.urlopen(url)
 
         except:
             logging.exception("")
