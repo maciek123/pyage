@@ -10,7 +10,7 @@ from pyage.core.emas import EmasService
 from pyage.core.locator import  GridParentLocator
 from pyage.core.migration import Pyro4Migration
 from pyage.core.statistics import  TimeStatistics
-from pyage.core.stop_condition import StepLimitStopCondition, MinimumFitnessStopCondition
+from pyage.core.stop_condition import StepLimitStopCondition
 from pyage.solutions.evolution.crossover import   SinglePointCrossover
 from pyage.solutions.evolution.evaluation import  FloatRastriginEvaluation
 from pyage.solutions.evolution.initializer import  float_emas_initializer
@@ -25,7 +25,7 @@ agents = unnamed_agents(agents_count, AggregateAgent)
 
 stop_condition = lambda: StepLimitStopCondition(100)
 
-aggregated_agents = lambda: float_emas_initializer(40, energy=100, size=10, lowerbound=-10, upperbound=10)
+aggregated_agents = lambda: float_emas_initializer(40, energy=100, size=50, lowerbound=-10, upperbound=10)
 
 emas = EmasService
 

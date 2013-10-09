@@ -8,7 +8,7 @@ from pyage.core.agent.aggregate import AggregateAgent
 from pyage.core.emas import EmasService
 from pyage.core.locator import  GridParentLocator
 from pyage.core.migration import  ParentMigration
-from pyage.core.statistics import  TimeStatistics
+from pyage.core.stats.gnuplot import TimeStatistics, StepStatistics
 from pyage.core.stop_condition import StepLimitStopCondition
 from pyage.solutions.evolution.crossover import   SinglePointCrossover
 from pyage.solutions.evolution.evaluation import  FloatRastriginEvaluation
@@ -22,9 +22,9 @@ agents_count = int(os.environ['AGENTS'])
 logger.debug("EMAS, %s agents", agents_count)
 agents = unnamed_agents(agents_count, AggregateAgent)
 
-stop_condition = lambda: StepLimitStopCondition(100)
+stop_condition = lambda: StepLimitStopCondition(1000)
 
-aggregated_agents = lambda: float_emas_initializer(40, energy=100, size=10, lowerbound=-10, upperbound=10)
+aggregated_agents = lambda: float_emas_initializer(40, energy=100, size=50, lowerbound=-10, upperbound=10)
 
 emas = EmasService
 
@@ -44,4 +44,4 @@ migration = ParentMigration
 locator = GridParentLocator
 
 
-stats = TimeStatistics
+stats = StepStatistics

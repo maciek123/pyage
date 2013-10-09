@@ -7,7 +7,7 @@ import signal
 
 logger = logging.getLogger(__name__)
 
-WORKSPACE = "workplace"
+WORKPLACE = "workplace"
 
 class Workplace(Addressable):
     @Inject("agents:_Workplace__agents", "migration", "stop_condition", "stats")
@@ -18,6 +18,7 @@ class Workplace(Addressable):
             agent.parent = self
         self.steps = 0
         self.stopped = False
+        self.best_known_fitness = -float("inf")
 
         def signal_handler(signal, frame):
             print 'You pressed Ctrl+C!'
@@ -47,6 +48,12 @@ class Workplace(Addressable):
     def get_fitness(self):
         return max(a.get_fitness() for a in self.get_agents())
 
+    def get_best_known_fitness(self):
+        return self.best_known_fitness
+
+    def set_best_known_fitness(self, fitness):
+        logger.info("new best fitness registered: " + str(fitness))
+        self.best_known_fitness = fitness
 
     def publish_agents(self):
         for agent in self.__agents.values():
@@ -81,7 +88,7 @@ class Workplace(Addressable):
             uri = self.daemon.register(self)
             try:
                 ns = locateNS(self.ns_hostname)
-                ns.register(WORKSPACE + '.' + self.address, uri)
+                ns.register(WORKPLACE + '.' + self.address, uri)
                 logger.debug(ns.list())
             except:
                 logger.debug("could not locate nameserver")
@@ -89,7 +96,7 @@ class Workplace(Addressable):
     def unregister(self):
         try:
             ns = locateNS(self.ns_hostname)
-            ns.remove(WORKSPACE + '.' + self.address)
+            ns.remove(WORKPLACE + '.' + self.address)
             logger.debug(ns.list())
         except:
             logger.debug("could not locate nameserver")

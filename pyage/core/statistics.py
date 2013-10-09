@@ -65,7 +65,8 @@ class TimeStatistics(SimpleStatistics):
                     time.time() - self.start, os.environ['AGENTS'], sys.argv[1])
                 logger.info(url)
                 urllib2.urlopen(url)
-
+            logger.debug(self.history)
+            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness).get_best_genotype())
         except:
             logging.exception("")
 
