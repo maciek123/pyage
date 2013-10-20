@@ -25,15 +25,8 @@ if __name__ == '__main__':
     Pyro4.config.COMMTIMEOUT = 1
     while not workspace.stopped:
         workspace.step()
-        try:
-            sleep(float(sys.argv[2]))
-        except IndexError:
-            pass
-    try:
-        time = time() - start_time
-        logger.debug("elapsed time: %s seconds", time)
-    except:
-        logger.exception("could not open url")
+    time = time() - start_time
+    logger.debug("elapsed time: %s seconds", time)
     if hasattr(workspace, "daemon"):
         workspace.daemon.close()
     workspace.unregister_agents()

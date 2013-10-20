@@ -1,6 +1,10 @@
 import logging
+import os
+import urllib2
 import Pyro4
-from pyage.core.inject import Inject
+import time
+import sys
+from pyage.core.inject import Inject, InjectOptional
 from pyage.core.statistics import Statistics
 from pyage.core.workplace import WORKPLACE
 
@@ -8,9 +12,11 @@ logger = logging.getLogger(__name__)
 
 class GlobalStepStatistics(Statistics):
     @Inject("ns_hostname")
+    @InjectOptional("notification_url")
     def __init__(self):
         super(GlobalStepStatistics, self).__init__()
         self.fitness_output = open('fitness_pyage.txt', 'a')
+        self.start = time.time()
 
     def update(self, step_count, agents):
         if step_count % 100 == 0:
@@ -23,4 +29,12 @@ class GlobalStepStatistics(Statistics):
         self.fitness_output.write(str(step_count) + ';' + str(abs(best_fitness)) + '\n')
 
     def summarize(self, agents):
-        pass
+        try:
+            if hasattr(self, "notification_url"):
+                url = self.notification_url + "?time=%s&agents=%s&conf=%s" % (
+                    time.time() - self.start, os.environ['AGENTS'], sys.argv[1])
+                logger.info(url)
+                urllib2.urlopen(url)
+
+        except:
+            logging.exception("")
