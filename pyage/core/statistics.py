@@ -8,6 +8,7 @@ from pyage.core.inject import InjectOptional, Inject
 
 logger = logging.getLogger(__name__)
 
+
 class Statistics(object):
     def update(self, step_count, agents):
         raise NotImplementedError()

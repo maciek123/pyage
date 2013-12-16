@@ -6,9 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 class StepStatistics(Statistics):
-    def __init__(self):
+    def __init__(self, output_file_name='fitness_pyage.txt'):
         self.history = []
-        self.fitness_output = open('fitness_pyage.txt', 'a')
+        self.fitness_output = open(output_file_name, 'a')
 
     def __del__(self):
         self.fitness_output.close()
@@ -33,9 +33,10 @@ class StepStatistics(Statistics):
         except:
             logging.exception("")
 
+
 class TimeStatistics(StepStatistics):
-    def __init__(self):
-        super(TimeStatistics, self).__init__()
+    def __init__(self, output_file_name='fitness_pyage.txt'):
+        super(TimeStatistics, self).__init__(output_file_name)
         self.start = time.time()
 
     def append(self, best_fitness, step_count):

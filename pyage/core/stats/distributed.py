@@ -10,12 +10,13 @@ from pyage.core.workplace import WORKPLACE
 
 logger = logging.getLogger(__name__)
 
+
 class GlobalStepStatistics(Statistics):
     @Inject("ns_hostname")
     @InjectOptional("notification_url")
-    def __init__(self):
+    def __init__(self, output_file_name='fitness_pyage.txt'):
         super(GlobalStepStatistics, self).__init__()
-        self.fitness_output = open('fitness_pyage.txt', 'a')
+        self.fitness_output = open(output_file_name, 'a')
         self.start = time.time()
 
     def update(self, step_count, agents):
