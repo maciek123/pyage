@@ -1,13 +1,14 @@
 import logging
 from Pyro4 import locateNS
 from pyage.core.address import Addressable
-from inject import Inject, InjectOptional
+from pyage.core.inject import Inject, InjectOptional
 from pyage.core.agent.agent import AGENT
 import signal
 
 logger = logging.getLogger(__name__)
 
 WORKPLACE = "workplace"
+
 
 class Workplace(Addressable):
     @Inject("agents:_Workplace__agents", "migration", "stop_condition", "stats")

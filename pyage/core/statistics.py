@@ -1,12 +1,12 @@
 import logging
 import os
 import urllib2
-import pylab
 import time
 import sys
 from pyage.core.inject import InjectOptional, Inject
 
 logger = logging.getLogger(__name__)
+
 
 class Statistics(object):
     def update(self, step_count, agents):
@@ -17,8 +17,9 @@ class Statistics(object):
 
 
 class SimpleStatistics(Statistics):
-    def __init__(self):
+    def __init__(self, plot_file_name='plot.png'):
         self.history = []
+        self.plot_file_name = plot_file_name
 
     def update(self, step_count, agents):
         try:
@@ -30,18 +31,19 @@ class SimpleStatistics(Statistics):
 
     def summarize(self, agents):
         try:
+            import pylab
             logger.debug(self.history)
             logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness).get_best_genotype())
             pylab.yscale('symlog')
-            pylab.savefig('plot.png')
+            pylab.savefig(self.plot_file_name)
         except:
             logging.exception("")
 
 
 class TimeStatistics(SimpleStatistics):
     @InjectOptional("notification_url")
-    def __init__(self):
-        super(TimeStatistics, self).__init__()
+    def __init__(self, plot_file_name='plot.png'):
+        super(TimeStatistics, self).__init__(plot_file_name)
         self.times = []
         self.start = time.time()
 
@@ -54,11 +56,12 @@ class TimeStatistics(SimpleStatistics):
 
     def summarize(self, agents):
         try:
+            import pylab
             pylab.plot(self.times, self.history)
             pylab.xlabel("time (s)")
             pylab.ylabel("fitness")
             pylab.yscale('symlog')
-            pylab.savefig('plot.png')
+            pylab.savefig(self.plot_file_name)
 
             if hasattr(self, "notification_url"):
                 url = self.notification_url + "?time=%s&agents=%s&conf=%s" % (
