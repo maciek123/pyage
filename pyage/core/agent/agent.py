@@ -1,5 +1,6 @@
 import logging
 import random
+
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
 
@@ -7,6 +8,7 @@ from pyage.core.inject import Inject
 logger = logging.getLogger(__name__)
 
 AGENT = "agent"
+
 
 class AbstractAgent:
     def initialize(self):

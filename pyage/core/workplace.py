@@ -1,11 +1,15 @@
 import logging
-from Pyro4 import locateNS
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject, InjectOptional
 from pyage.core.agent.agent import AGENT
 import signal
 
 logger = logging.getLogger(__name__)
+
+try:
+    from Pyro4 import locateNS
+except:
+    print "Pyro4 not installed, running in local mode only"
 
 WORKPLACE = "workplace"
 

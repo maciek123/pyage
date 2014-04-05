@@ -1,10 +1,14 @@
 import logging
 import random
-import Pyro4
 from pyage.core.agent.agent import AGENT
 from pyage.core.inject import Inject
 
 logger = logging.getLogger(__name__)
+
+try:
+    from Pyro4 import locateNS
+except:
+    print "Pyro4 not installed, running in local mode only"
 
 class Locator(object):
     def get_neighbour(self, agent):
