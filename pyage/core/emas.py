@@ -1,9 +1,9 @@
 import logging
-import random
 from pyage.core.address import Addressable
 from pyage.core.inject import Inject
 
 logger = logging.getLogger(__name__)
+
 
 class EmasAgent(Addressable):
     @Inject("locator", "migration", "evaluation", "crossover", "mutation", "emas", "transferred_energy")
@@ -17,11 +17,9 @@ class EmasAgent(Addressable):
 
     def step(self):
         self.steps += 1
- #       logger.debug("%s %s %s %s", self.steps, self.address, self.get_fitness(), self.energy)
         try:
             neighbour = self.locator.get_neighbour(self)
             if neighbour:
-#                logger.debug("neighbour: %s", neighbour.get_address())
                 if self.emas.should_die(self):
                     self.death(neighbour)
                 elif self.emas.should_reproduce(self, neighbour):
@@ -60,10 +58,28 @@ class EmasAgent(Addressable):
             neighbour.add_energy(transfered_energy)
 
     def death(self, neighbour):
+        self.distribute_energy()
         neighbour.add_energy(self.energy)
         self.energy = 0
         self.parent.remove_agent(self)
-        logger.debug(str(self) + "died")
+        logger.debug(str(self) + "died!")
+
+    def distribute_energy(self):
+        logger.debug("death, energy level: %d" % self.energy)
+        if self.energy > 0:
+            siblings = set(self.parent.get_agents())
+            siblings.remove(self)
+            portion = self.energy / len(siblings)
+            if portion > 0:
+                logger.debug("passing %d portion of energy to %d agents" % (portion, len(siblings)))
+                for agent in siblings:
+                    agent.add_energy(portion)
+            left = self.energy % len(siblings)
+            logger.debug("distributing %d left energy" % left)
+            while left > 0:
+                siblings.pop().add_energy(1)
+                left -= 1
+
 
 class EmasService(object):
     @Inject("minimal_energy", "reproduction_minimum", "migration_minimum", "newborn_energy")

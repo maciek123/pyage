@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     start_time = time()
-    logging.basicConfig(filename='pyage-' + datetime.now().strftime("%Y%m%d_%H%S") + '.log', level=logging.INFO)
+    logging.basicConfig(filename='pyage-' + datetime.now().strftime("%Y%m%d_%H%M%S") + '.log', level=logging.INFO)
     inject.config = sys.argv[1]
     logging.debug("config: %s", inject.config)
     workspace = Workplace()
