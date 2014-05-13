@@ -7,9 +7,9 @@ setup(
     name="pyage",
     description="Python Agent-based evolution",
     packages=find_packages(),
-    version="0.9.11",
+    version="1.0.0",
     author="Maciej Kaziród",
-    author_email="kmaciej@student.agh.edu.pl",
+    author_email="kazirod.maciej@gmail.com",
     requires=['Pyro4(==4.17)']
 )
 
