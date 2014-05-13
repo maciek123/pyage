@@ -4,7 +4,7 @@ import logging
 from pyage.core import address
 
 from pyage.core.agent.agent import generate_agents, Agent
-from pyage.core.locator import ParentLocator
+from pyage.core.locator import RandomLocator
 from pyage.core.migration import NoMigration
 from pyage.core.statistics import NoStatistics
 from pyage.core.stop_condition import StepLimitStopCondition
@@ -31,6 +31,6 @@ initializer = lambda: FloatInitializer(2, size, -10, 10)
 address_provider = address.SequenceAddressProvider
 
 migration = NoMigration
-locator = ParentLocator
+locator = RandomLocator
 
 stats = NoStatistics

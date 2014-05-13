@@ -7,7 +7,7 @@ from pyage.core import address
 from pyage.core.agent.agent import unnamed_agents
 from pyage.core.agent.aggregate import AggregateAgent
 from pyage.core.emas import EmasService
-from pyage.core.locator import  GridParentLocator
+from pyage.core.locator import  RowLocator
 from pyage.core.migration import Pyro4Migration
 from pyage.core.statistics import  TimeStatistics
 from pyage.core.stop_condition import StepLimitStopCondition
@@ -42,7 +42,7 @@ mutation = lambda: UniformFloatMutation(probability=1, radius=1)
 address_provider = address.SequenceAddressProvider
 
 migration = Pyro4Migration
-locator = GridParentLocator
+locator = RowLocator
 
 ns_hostname = lambda: os.environ['NS_HOSTNAME']
 pyro_daemon = Pyro4.Daemon()

@@ -6,7 +6,7 @@ import Pyro4
 from pyage.core import address
 from pyage.core.agent.agent import   generate_agents, unnamed_agents, Agent
 from pyage.core.agent.aggregate import AggregateAgent
-from pyage.core.locator import  ParentLocator
+from pyage.core.locator import  RandomLocator
 from pyage.core.migration import Pyro4Migration
 from pyage.core.statistics import  TimeStatistics
 from pyage.core.stop_condition import StepLimitStopCondition
@@ -34,7 +34,7 @@ initializer = lambda: FloatInitializer(500, size, -10, 10)
 address_provider = address.SequenceAddressProvider
 
 migration = Pyro4Migration
-locator = ParentLocator
+locator = RandomLocator
 
 ns_hostname = lambda: os.environ['NS_HOSTNAME']
 pyro_daemon = Pyro4.Daemon()
