@@ -15,7 +15,7 @@ WORKPLACE = "workplace"
 
 
 class Workplace(Addressable):
-    @Inject("agents:_Workplace__agents", "migration", "stop_condition", "stats")
+    @Inject("agents:_Workplace__agents", "stop_condition", "stats")
     @InjectOptional("ns_hostname", "daemon")
     def __init__(self):
         super(Workplace, self).__init__()
