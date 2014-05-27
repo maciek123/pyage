@@ -29,7 +29,7 @@ class StepStatistics(Statistics):
     def summarize(self, agents):
         try:
             logger.debug(self.history)
-            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness).get_best_genotype())
+            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness()).get_best_genotype())
         except:
             logging.exception("")
 
