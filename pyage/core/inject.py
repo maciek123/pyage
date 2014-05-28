@@ -21,7 +21,7 @@ class Inject(object):
 
         """
 
-        def wrapped_f(*args):
+        def wrapped_f(*args, **kwargs):
             conf = self.read_config(config)
             for arg in self.args:
                 conf_arg_name = arg.split(":")[0]
@@ -31,7 +31,7 @@ class Inject(object):
                 except:
                     attr = getattr(conf, conf_arg_name)()
                 setattr(args[0], property_name, attr)
-            f(*args)
+            f(*args, **kwargs)
 
         return wrapped_f
 
@@ -41,7 +41,7 @@ class InjectOptional(Inject):
         super(InjectOptional, self).__init__(*args)
 
     def __call__(self, f):
-        def wrapped_f(*args):
+        def wrapped_f(*args, **kwargs):
             try:
                 conf = self.read_config(config)
                 for arg in self.args:
@@ -54,7 +54,7 @@ class InjectOptional(Inject):
                     setattr(args[0], property_name, attr)
             except:
                 pass #parameter is not mandatory
-            f(*args)
+            f(*args, **kwargs)
 
         return wrapped_f
 
