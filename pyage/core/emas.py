@@ -59,7 +59,6 @@ class EmasAgent(Addressable):
 
     def death(self, neighbour):
         self.distribute_energy()
-        neighbour.add_energy(self.energy)
         self.energy = 0
         self.parent.remove_agent(self)
         logger.debug(str(self) + "died!")
@@ -77,8 +76,9 @@ class EmasAgent(Addressable):
             left = self.energy % len(siblings)
             logger.debug("distributing %d left energy" % left)
             while left > 0:
-                siblings.pop().add_energy(1)
-                left -= 1
+                e = min(left, 1)
+                siblings.pop().add_energy(e)
+                left -= e
 
 
 class EmasService(object):
