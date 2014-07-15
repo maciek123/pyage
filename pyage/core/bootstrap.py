@@ -19,21 +19,21 @@ if __name__ == '__main__':
     logging.basicConfig(filename='pyage-' + datetime.now().strftime("%Y%m%d_%H%M%S") + '.log', level=level)
     inject.config = sys.argv[1]
     logging.debug("config: %s", inject.config)
-    workspace = Workplace()
-    workspace.publish()
-    workspace.publish_agents()
-    logger.debug(workspace.address)
-    if hasattr(workspace, "daemon"):
-        thread = threading.Thread(target=workspace.daemon.requestLoop)
+    workplace = Workplace()
+    workplace.publish()
+    workplace.publish_agents()
+    logger.debug(workplace.address)
+    if hasattr(workplace, "daemon"):
+        thread = threading.Thread(target=workplace.daemon.requestLoop)
         thread.setDaemon(True)
         thread.start()
         import Pyro4
         Pyro4.config.COMMTIMEOUT = 1
-    while not workspace.stopped:
-        workspace.step()
+    while not workplace.stopped:
+        workplace.step()
     time = time() - start_time
     logger.debug("elapsed time: %s seconds", time)
-    if hasattr(workspace, "daemon"):
-        workspace.daemon.close()
-    workspace.unregister_agents()
-    workspace.unregister()
+    if hasattr(workplace, "daemon"):
+        workplace.daemon.close()
+    workplace.unregister_agents()
+    workplace.unregister()
