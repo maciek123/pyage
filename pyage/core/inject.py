@@ -31,7 +31,7 @@ class Inject(object):
                 except:
                     attr = getattr(conf, conf_arg_name)()
                 setattr(args[0], property_name, attr)
-            f(*args, **kwargs)
+            return f(*args, **kwargs)
 
         return wrapped_f
 
@@ -54,7 +54,7 @@ class InjectOptional(Inject):
                     setattr(args[0], property_name, attr)
             except:
                 pass #parameter is not mandatory
-            f(*args, **kwargs)
+            return f(*args, **kwargs)
 
         return wrapped_f
 

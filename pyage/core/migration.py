@@ -21,7 +21,7 @@ class Pyro4Migration(Migration):
         try:
             if random.random() < self.probability and len(agent.parent.get_agents()) > 1:
                 logger.debug("migrating!")
-                aggregate = self.__get_random_aggregate(agent)
+                aggregate = self._get_random_aggregate(agent)
                 logger.debug(aggregate.get_address())
                 aggregate.add_agent(agent.parent.remove_agent(agent))
                 return True
@@ -29,7 +29,7 @@ class Pyro4Migration(Migration):
             logging.exception("")
         return False
 
-    def __get_random_aggregate(self, agent):
+    def _get_random_aggregate(self, agent):
         ns = Pyro4.locateNS(self.ns_hostname)
         agents = ns.list(AGENT)
         logger.debug(agents)
