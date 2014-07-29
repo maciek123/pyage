@@ -40,6 +40,11 @@ class Workplace(Addressable):
     def stop(self):
         self.stopped = True
         self.stats.summarize(self.__agents.values())
+        try:
+            for a in self.__agents.values():
+                a.stop()
+        except AttributeError:
+            pass  # "old style" agents (pre pyage 1.1) don't have such method
 
     def step(self):
         self.steps += 1
@@ -60,25 +65,6 @@ class Workplace(Addressable):
         logger.info("new best fitness registered: " + str(fitness))
         self.best_known_fitness = fitness
 
-    def publish_agents(self):
-        for agent in self.__agents.values():
-            try:
-                uri = self.daemon.register(agent)
-                ns = locateNS(self.ns_hostname)
-                ns.register('%s.%s' % (AGENT, agent.address), uri)
-                logger.debug(ns.list())
-            except:
-                logger.debug("could not locate nameserver")
-
-    def unregister_agents(self):
-        try:
-            ns = locateNS(self.ns_hostname)
-            for agent in self.__agents.values():
-                ns.remove('%s.%s' % (AGENT, agent.address))
-            logger.debug(ns.list())
-        except:
-            logger.debug("could not locate nameserver")
-
     def get_agent(self, address):
         return self.__agents[address]
 
@@ -95,13 +81,34 @@ class Workplace(Addressable):
                 ns = locateNS(self.ns_hostname)
                 ns.register(WORKPLACE + '.' + self.address, uri)
                 logger.debug(ns.list())
+                self.publish_agents()
+            except:
+                logger.debug("could not locate nameserver")
+
+    def publish_agents(self):
+        for agent in self.__agents.values():
+            try:
+                uri = self.daemon.register(agent)
+                ns = locateNS(self.ns_hostname)
+                ns.register('%s.%s' % (AGENT, agent.address), uri)
+                logger.debug(ns.list())
             except:
                 logger.debug("could not locate nameserver")
 
     def unregister(self):
         try:
+            self.unregister_agents()
             ns = locateNS(self.ns_hostname)
             ns.remove(WORKPLACE + '.' + self.address)
+            logger.debug(ns.list())
+        except:
+            logger.debug("could not locate nameserver")
+
+    def unregister_agents(self):
+        try:
+            ns = locateNS(self.ns_hostname)
+            for agent in self.__agents.values():
+                ns.remove('%s.%s' % (AGENT, agent.address))
             logger.debug(ns.list())
         except:
             logger.debug("could not locate nameserver")

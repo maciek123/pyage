@@ -21,7 +21,6 @@ if __name__ == '__main__':
     logging.debug("config: %s", inject.config)
     workplace = Workplace()
     workplace.publish()
-    workplace.publish_agents()
     logger.debug(workplace.address)
     if hasattr(workplace, "daemon"):
         thread = threading.Thread(target=workplace.daemon.requestLoop)
@@ -35,5 +34,4 @@ if __name__ == '__main__':
     logger.debug("elapsed time: %s seconds", time)
     if hasattr(workplace, "daemon"):
         workplace.daemon.close()
-    workplace.unregister_agents()
     workplace.unregister()
