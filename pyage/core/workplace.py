@@ -47,12 +47,16 @@ class Workplace(Addressable):
             pass  # "old style" agents (pre pyage 1.1) don't have such method
 
     def step(self):
-        self.steps += 1
-        logger.info("=========STEP %s=============", self.steps)
-        for agent in self.__agents.values():
-            agent.step()
-        self.stats.update(self.steps, self.__agents.values())
-        if self.stop_condition.should_stop(self):
+        try:
+            self.steps += 1
+            logger.info("=========STEP %s=============", self.steps)
+            for agent in self.__agents.values():
+                agent.step()
+            self.stats.update(self.steps, self.__agents.values())
+            if self.stop_condition.should_stop(self):
+                self.stop()
+        except:
+            logger.warning("Caught exception, stopping")
             self.stop()
 
     def get_fitness(self):
