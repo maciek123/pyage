@@ -57,6 +57,7 @@ class Workplace(Addressable):
                 self.stop()
         except:
             logger.warning("Caught exception, stopping")
+            logging.exception("exception in step %s" % self.steps)
             self.stop()
 
     def get_fitness(self):
