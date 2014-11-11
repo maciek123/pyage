@@ -57,14 +57,3 @@ class InjectOptional(Inject):
             return f(*args, **kwargs)
 
         return wrapped_f
-
-
-class Singleton(object):
-    def __init__(self, f):
-        self.result = None
-
-    def __call__(self, f):
-        if not self.result:
-            self.result = f()
-        return self.result
-
