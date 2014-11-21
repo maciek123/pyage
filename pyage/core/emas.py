@@ -21,7 +21,7 @@ class EmasAgent(Addressable):
             neighbour = self.locator.get_neighbour(self)
             if neighbour:
                 if self.emas.should_die(self):
-                    self.death(neighbour)
+                    self.death()
                 elif self.emas.should_reproduce(self, neighbour):
                     self.emas.reproduce(self, neighbour)
                 else:
@@ -39,6 +39,8 @@ class EmasAgent(Addressable):
 
     def add_energy(self, energy):
         self.energy += energy
+        if self.emas.should_die(self):
+            self.death()
 
     def get_energy(self):
         return self.energy
@@ -57,7 +59,7 @@ class EmasAgent(Addressable):
             self.energy -= transfered_energy
             neighbour.add_energy(transfered_energy)
 
-    def death(self, neighbour):
+    def death(self):
         self.distribute_energy()
         self.energy = 0
         self.parent.remove_agent(self)
