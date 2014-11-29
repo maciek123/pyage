@@ -58,6 +58,8 @@ class EmasAgent(Addressable):
             transfered_energy = min(self.transferred_energy, self.energy)
             self.energy -= transfered_energy
             neighbour.add_energy(transfered_energy)
+        if self.emas.should_die(self):
+            self.death()
 
     def death(self):
         self.distribute_energy()
