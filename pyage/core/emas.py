@@ -13,6 +13,7 @@ class EmasAgent(Addressable):
         self.genotype = genotype
         self.energy = energy
         self.steps = 0
+        self.dead = False
         self.evaluation.process([genotype])
 
     def step(self):
@@ -26,8 +27,8 @@ class EmasAgent(Addressable):
                     self.emas.reproduce(self, neighbour)
                 else:
                     self.meet(neighbour)
-                if self.emas.can_migrate(self):
-                    self.migration.migrate(self)
+                if self.emas.can_migrate(self) and self.migration.migrate(self):
+                    self.locator.remove_agent(self)
         except:
             logging.exception('')
 
@@ -64,11 +65,12 @@ class EmasAgent(Addressable):
     def death(self):
         self.distribute_energy()
         self.energy = 0
+        self.dead = True
         self.parent.remove_agent(self)
         logger.debug(str(self) + "died!")
 
     def distribute_energy(self):
-        logger.debug("death, energy level: %d" % self.energy)
+        logger.debug("%s is dying, energy level: %d" % (self, self.energy))
         if self.energy > 0:
             siblings = set(self.parent.get_agents())
             siblings.remove(self)
@@ -84,6 +86,9 @@ class EmasAgent(Addressable):
                 siblings.pop().add_energy(e)
                 left -= e
 
+    def __repr__(self):
+        return "<EmasAgent@%s>" % self.get_address()
+
 
 class EmasService(object):
     @Inject("minimal_energy", "reproduction_minimum", "migration_minimum", "newborn_energy")
@@ -91,7 +96,7 @@ class EmasService(object):
         super(EmasService, self).__init__()
 
     def should_die(self, agent):
-        return agent.get_energy() <= self.minimal_energy
+        return agent.get_energy() <= self.minimal_energy and not agent.dead
 
     def should_reproduce(self, a1, a2):
         return a1.get_energy() > self.reproduction_minimum and a2.get_energy() > self.reproduction_minimum

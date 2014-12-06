@@ -11,7 +11,7 @@ class TestTorusLocator(TestCase):
 
         locator.add_agent(agent, 0, 1)
 
-        self.assertEqual(locator.get_at(0, 1), agent)
+        self.assertIsNotNone(locator.get_allowed_moves(agent))
 
     def test_add_all(self):
         locator = TorusLocator(2, 5)
@@ -20,6 +20,11 @@ class TestTorusLocator(TestCase):
 
         self.assertEqual(len(locator.get_empty_slots()), 8)
 
+    def test_add_agent_random_position(self):
+        locator = TorusLocator(2, 5)
+        agent = DummyAgent()
+
+        self.assertIsNotNone(locator.get_allowed_moves(agent))
 
     @raises(KeyError)
     def test_should_not_add_to_occupied_cell(self):
@@ -65,6 +70,18 @@ class TestTorusLocator(TestCase):
         self.assertEqual(a2, locator.get_neighbour(a1))
         self.assertFalse(a3 == locator.get_neighbour(a1))
         self.assertIsNone(locator.get_neighbour(a3))
+
+    def test_remove_dead_agents(self):
+        locator = TorusLocator(5, 6)
+        a1 = DummyAgent()
+        a2 = DummyAgent()
+        locator.add_agent(a1, 0, 0)
+        locator.add_agent(a2, 0, 1)
+
+        self.assertEqual(a2, locator.get_neighbour(a1))
+        a2.dead = True
+
+        self.assertIsNone(locator.get_neighbour(a1))
 
 
 class DummyAgent(object):

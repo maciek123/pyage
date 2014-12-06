@@ -3,11 +3,10 @@ import logging
 import os
 
 from pyage.core import address
-
 from pyage.core.agent.agent import unnamed_agents
 from pyage.core.agent.aggregate import AggregateAgent
 from pyage.core.emas import EmasService
-from pyage.core.locator import GridLocator
+from pyage.core.locator import TorusLocator, GridLocator
 from pyage.core.migration import ParentMigration
 from pyage.core.stats.gnuplot import StepStatistics
 from pyage.core.stop_condition import StepLimitStopCondition
@@ -42,6 +41,8 @@ mutation = lambda: UniformFloatMutation(probability=1, radius=1)
 address_provider = address.SequenceAddressProvider
 
 migration = ParentMigration
+
+torus = TorusLocator(10, 10)
 locator = GridLocator
 
 stats = lambda: StepStatistics('fitness_%s_pyage.txt' % __name__)

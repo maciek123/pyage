@@ -16,7 +16,6 @@ class AggregateAgent(Addressable, AbstractAgent):
             agent.step()
 
     def remove_agent(self, agent):
-        agent = self.__agents[agent.get_address()]
         del self.__agents[agent.get_address()]
         agent.parent = None
         return agent
