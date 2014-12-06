@@ -49,10 +49,13 @@ class TorusLocator(Locator):
     def get_empty_slots(self):
         return [(x, y) for x in range(self.x) for y in range(self.y) if self.grid[x][y] is None]
 
-    def add_agent(self, agent, x, y):
+    def add_agent(self, agent, x=None, y=None):
+        if x is None or y is None:
+            x, y = random.choice(self.get_empty_slots())
         if self.grid[x][y] is not None:
             raise KeyError("Position occupied: (%d, %d)" % (x, y))
         self.grid[x][y] = agent
+        return x, y
 
     def add_all(self, agents):
         for agent in agents:
@@ -67,11 +70,13 @@ class TorusLocator(Locator):
         self.grid[x][y] = None
 
     def get_allowed_moves(self, agent):
+        self._remove_dead()
         x, y = self._get_coords(agent)
         return set(filter(lambda (x, y): self.grid[x][y] is None, self._get_nieghbour_coords(x, y)))
 
     def get_neighbour(self, agent):
         try:
+            self._remove_dead()
             x, y = self._get_coords(agent)
             neighbours = [self.grid[i][j] for (i, j) in (self._get_nieghbour_coords(x, y)) if
                           self.grid[i][j] is not None]
@@ -84,6 +89,13 @@ class TorusLocator(Locator):
             for j, value in enumerate(row):
                 if value == agent:
                     return i, j
+        return self.add_agent(agent)
 
     def _get_nieghbour_coords(self, x, y):
         return [(i % self.x, j % self.y) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2) if i != x or j != y]
+
+    def _remove_dead(self):
+        for i in range(self.x):
+            for j in range(self.y):
+                if hasattr(self.grid[i][j], "dead") and self.grid[i][j].dead:
+                    self.grid[i][j] = None
