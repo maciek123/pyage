@@ -9,7 +9,7 @@ class TestTorusLocator(TestCase):
         locator = TorusLocator(2, 5)
         agent = DummyAgent()
 
-        locator.add_agent(agent, 0, 1)
+        locator.add_agent(agent, (0, 1))
 
         self.assertIsNotNone(locator.get_allowed_moves(agent))
 
@@ -29,13 +29,13 @@ class TestTorusLocator(TestCase):
     @raises(KeyError)
     def test_should_not_add_to_occupied_cell(self):
         locator = TorusLocator(2, 5)
-        locator.add_agent(DummyAgent(), 0, 1)
-        locator.add_agent(DummyAgent(), 0, 1)
+        locator.add_agent(DummyAgent(), (0, 1))
+        locator.add_agent(DummyAgent(), (0, 1))
 
     def test_remove_agent(self):
         locator = TorusLocator(5, 6)
         agent = DummyAgent()
-        locator.add_agent(agent, 0, 0)
+        locator.add_agent(agent, (0, 0))
         self.assertNotIn((0, 0), locator.get_empty_slots())
 
         locator.remove_agent(agent)
@@ -46,14 +46,14 @@ class TestTorusLocator(TestCase):
         locator = TorusLocator(2, 5)
         self.assertEqual(locator.get_empty_slots(), [(x, y) for x in range(2) for y in range(5)])
 
-        locator.add_agent(DummyAgent(), 0, 1)
+        locator.add_agent(DummyAgent(), (0, 1))
         self.assertFalse((0, 1) in locator.get_empty_slots())
 
     def test_allowed_moves(self):
         locator = TorusLocator(5, 6)
         agent = DummyAgent()
-        locator.add_agent(agent, 0, 0)
-        locator.add_agent(DummyAgent(), 1, 1)
+        locator.add_agent(agent, (0, 0))
+        locator.add_agent(DummyAgent(), (1, 1))
 
         self.assertEquals(locator.get_allowed_moves(agent),
                           {(0, 1), (0, 5), (1, 0), (1, 5), (4, 0), (4, 1), (4, 5)})
@@ -63,9 +63,9 @@ class TestTorusLocator(TestCase):
         a1 = DummyAgent()
         a2 = DummyAgent()
         a3 = DummyAgent()
-        locator.add_agent(a1, 0, 0)
-        locator.add_agent(a2, 0, 1)
-        locator.add_agent(a3, 0, 3)
+        locator.add_agent(a1, (0, 0))
+        locator.add_agent(a2, (0, 1))
+        locator.add_agent(a3, (0, 3))
 
         self.assertEqual(a2, locator.get_neighbour(a1))
         self.assertFalse(a3 == locator.get_neighbour(a1))
@@ -75,8 +75,8 @@ class TestTorusLocator(TestCase):
         locator = TorusLocator(5, 6)
         a1 = DummyAgent()
         a2 = DummyAgent()
-        locator.add_agent(a1, 0, 0)
-        locator.add_agent(a2, 0, 1)
+        locator.add_agent(a1, (0, 0))
+        locator.add_agent(a2, (0, 1))
 
         self.assertEqual(a2, locator.get_neighbour(a1))
         a2.dead = True

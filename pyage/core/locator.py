@@ -12,7 +12,7 @@ class Locator(object):
     def get_empty_slots(self):
         raise NotImplementedError()
 
-    def add_agent(self, agent, *where):
+    def add_agent(self, agent, where):
         raise NotImplementedError()
 
     def add_all(self, agents):
@@ -23,84 +23,10 @@ class Locator(object):
 
     def get_allowed_moves(self, agent):
         raise NotImplementedError()
-
-
-class RandomLocator(Locator):
-    def get_neighbour(self, agent):
-        siblings = list(agent.parent.get_agents())
-        if len(siblings) < 2:
-            return None
-        siblings.remove(agent)
-        return random.choice(siblings)
-
-    def remove_agent(self, agent):
-        pass
-
-    def get_allowed_moves(self, agent):
-        return super(RandomLocator, self).get_allowed_moves(agent)
-
-    def get_empty_slots(self):
-        return super(RandomLocator, self).get_empty_slots()
-
-    def add_all(self, agents):
-        return super(RandomLocator, self).add_all(agents)
-
-    def add_agent(self, agent, *where):
-        return super(RandomLocator, self).add_agent(agent, where)
-
-
-class RowLocator(Locator):
-    def get_neighbour(self, agent):
-        siblings = list(agent.parent.get_agents())
-        if len(siblings) < 2:
-            return None
-        index = siblings.index(agent)
-        return random.choice(siblings[index - 2:index] + siblings[index + 1:index + 3])
-
-    def remove_agent(self, agent):
-        pass
-
-    def get_allowed_moves(self, agent):
-        return super(RowLocator, self).get_allowed_moves(agent)
-
-    def get_empty_slots(self):
-        return super(RowLocator, self).get_empty_slots()
-
-    def add_all(self, agents):
-        return super(RowLocator, self).add_all(agents)
-
-    def add_agent(self, agent, *where):
-        return super(RowLocator, self).add_agent(agent, where)
-
-
-class GridLocator(Locator):
-    def get_neighbour(self, agent):
-        siblings = list(agent.parent.get_agents())
-        if len(siblings) < 2:
-            return None
-        index = siblings.index(agent)
-        size = len(siblings)
-        dim = int(ceil(sqrt(size)))
-        return siblings[random.choice([index - dim, index - 1, index + 1, index + dim]) % size]
-
-    def remove_agent(self, agent):
-        pass
-
-    def get_allowed_moves(self, agent):
-        return super(GridLocator, self).get_allowed_moves(agent)
-
-    def get_empty_slots(self):
-        return super(GridLocator, self).get_empty_slots()
-
-    def add_all(self, agents):
-        return super(GridLocator, self).add_all(agents)
-
-    def add_agent(self, agent, *where):
-        return super(GridLocator, self).add_agent(agent, *where)
 
 
 class TorusLocator(Locator):
-    def __init__(self, x, y):
+    def __init__(self, x=10, y=10):
         super(TorusLocator, self).__init__()
         self._grid = [[None for _ in range(y)] for _ in range(x)]
         self.x = x
@@ -109,9 +35,11 @@ class TorusLocator(Locator):
     def get_empty_slots(self):
         return [(x, y) for x in range(self.x) for y in range(self.y) if self._grid[x][y] is None]
 
-    def add_agent(self, agent, x=None, y=None):
-        if x is None or y is None:
+    def add_agent(self, agent, where=None):
+        if where is None:
             x, y = random.choice(self.get_empty_slots())
+        else:
+            x, y = where
         if self._grid[x][y] is not None:
             raise KeyError("Position occupied: (%d, %d)" % (x, y))
         self._grid[x][y] = agent
@@ -119,8 +47,7 @@ class TorusLocator(Locator):
 
     def add_all(self, agents):
         for agent in agents:
-            x, y = random.choice(self.get_empty_slots())
-            self.add_agent(agent, x, y)
+            self.add_agent(agent, random.choice(self.get_empty_slots()))
 
     def remove_agent(self, agent):
         x, y = self._get_coords(agent)
@@ -156,3 +83,8 @@ class TorusLocator(Locator):
             for j in range(self.y):
                 if hasattr(self._grid[i][j], "dead") and self._grid[i][j].dead:
                     self._grid[i][j] = None
+
+# old, deprecated classes, kept for compatibility reasons
+GridLocator = TorusLocator
+RowLocator = TorusLocator
+RandomLocator = TorusLocator
