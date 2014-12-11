@@ -26,11 +26,12 @@ class Locator(object):
 
 
 class TorusLocator(Locator):
-    def __init__(self, x=10, y=10):
+    def __init__(self, x=10, y=10, radius=1):
         super(TorusLocator, self).__init__()
         self._grid = [[None for _ in range(y)] for _ in range(x)]
         self.x = x
         self.y = y
+        self.radius = radius
 
     def get_empty_slots(self):
         return [(x, y) for x in range(self.x) for y in range(self.y) if self._grid[x][y] is None]
@@ -76,7 +77,8 @@ class TorusLocator(Locator):
         return self.add_agent(agent)
 
     def _get_nieghbour_coords(self, x, y):
-        return [(i % self.x, j % self.y) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2) if i != x or j != y]
+        return [(i % self.x, j % self.y) for i in range(x - self.radius, x + self.radius + 1) for j in
+                range(y - self.radius, y + self.radius + 1) if i != x or j != y]
 
     def _remove_dead(self):
         for i in range(self.x):

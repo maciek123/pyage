@@ -83,6 +83,16 @@ class TestTorusLocator(TestCase):
 
         self.assertIsNone(locator.get_neighbour(a1))
 
+    def test_neighbourhood_radius(self):
+        locator = TorusLocator(5, 6, 2)
+        agent = DummyAgent()
+        locator.add_agent(agent, (0, 0))
+
+        self.assertEquals(locator.get_allowed_moves(agent),
+                          {(0, 1), (0, 5), (1, 0), (1, 1), (1, 5), (4, 0), (4, 1), (4, 5), (0, 2), (1, 2), (2, 2),
+                           (2, 1), (2, 0), (3, 0), (3, 1), (3, 2), (4, 2), (0, 4), (1, 4), (2, 4), (2, 5), (4, 4),
+                           (3, 4), (3, 5)})
+
 
 class DummyAgent(object):
     def __init__(self):
