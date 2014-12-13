@@ -130,8 +130,8 @@ class EmasService(object):
         genotype = a1.crossover.cross(a1.genotype, a2.get_genotype())
         a1.mutation.mutate(genotype)
         newborn = EmasAgent(genotype, energy)
-        a1.parent.add_agent(newborn)
         self.locator.add_agent(newborn, get_random_move(self.locator.get_allowed_moves(a1)))
+        a1.parent.add_agent(newborn)
 
 
 def get_random_move(allowed_moves):

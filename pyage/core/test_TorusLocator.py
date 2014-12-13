@@ -32,6 +32,12 @@ class TestTorusLocator(TestCase):
         locator.add_agent(DummyAgent(), (0, 1))
         locator.add_agent(DummyAgent(), (0, 1))
 
+    @raises(RuntimeError)
+    def test_should_not_add_when_full(self):
+        locator = TorusLocator(1, 1)
+        locator.add_agent(DummyAgent())
+        locator.add_agent(DummyAgent())
+
     def test_remove_agent(self):
         locator = TorusLocator(5, 6)
         agent = DummyAgent()
@@ -92,6 +98,10 @@ class TestTorusLocator(TestCase):
                           {(0, 1), (0, 5), (1, 0), (1, 1), (1, 5), (4, 0), (4, 1), (4, 5), (0, 2), (1, 2), (2, 2),
                            (2, 1), (2, 0), (3, 0), (3, 1), (3, 2), (4, 2), (0, 4), (1, 4), (2, 4), (2, 5), (4, 4),
                            (3, 4), (3, 5)})
+
+    def test_add_too_many_agents(self):
+        locator = TorusLocator(5, 5)
+        self.assertEqual(25, locator.add_all([DummyAgent() for _ in range(30)]))
 
 
 class DummyAgent(object):

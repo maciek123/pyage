@@ -38,7 +38,10 @@ class TorusLocator(Locator):
 
     def add_agent(self, agent, where=None):
         if where is None:
-            x, y = random.choice(self.get_empty_slots())
+            slots = self.get_empty_slots()
+            if not slots:
+                raise RuntimeError("Could not add agent to full torus!")
+            x, y = random.choice(slots)
         else:
             x, y = where
         if self._grid[x][y] is not None:
@@ -47,8 +50,14 @@ class TorusLocator(Locator):
         return x, y
 
     def add_all(self, agents):
-        for agent in agents:
-            self.add_agent(agent, random.choice(self.get_empty_slots()))
+        added = 0
+        try:
+            for agent in agents:
+                self.add_agent(agent)
+                added += 1
+        except:
+            logger.warning("Could not add all agents to torus")
+        return added
 
     def remove_agent(self, agent):
         x, y = self._get_coords(agent)
