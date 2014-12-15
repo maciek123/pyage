@@ -42,7 +42,6 @@ address_provider = address.SequenceAddressProvider
 
 migration = ParentMigration
 
-torus = TorusLocator(10, 10)
-locator = lambda: torus
+locator = lambda: TorusLocator(10, 10)
 
 stats = lambda: StepStatistics('fitness_%s_pyage.txt' % __name__)

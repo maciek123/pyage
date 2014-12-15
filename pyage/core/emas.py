@@ -2,6 +2,7 @@ import logging
 import random
 
 from pyage.core.address import Addressable
+from pyage.core.agent.aggregate import get_random_move
 from pyage.core.inject import Inject, InjectWithDefault
 
 
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class EmasAgent(Addressable):
-    @Inject("locator", "migration", "evaluation", "crossover", "mutation", "emas", "transferred_energy")
+    @Inject("migration", "evaluation", "crossover", "mutation", "emas", "transferred_energy")
     def __init__(self, genotype, energy, name=None):
         self.name = name
         super(EmasAgent, self).__init__()
@@ -22,7 +23,7 @@ class EmasAgent(Addressable):
     def step(self):
         self.steps += 1
         try:
-            neighbour = self.locator.get_neighbour(self)
+            neighbour = self.parent.get_neighbour(self)
             if neighbour:
                 if self.emas.should_die(self):
                     self.death()
@@ -30,10 +31,10 @@ class EmasAgent(Addressable):
                     self.emas.reproduce(self, neighbour)
                 else:
                     self.meet(neighbour)
-                if self.emas.can_migrate(self) and self.migration.migrate(self):
-                    self.locator.remove_agent(self)
+                if self.emas.can_migrate(self):
+                    self.migration.migrate(self)
                 elif self.emas.should_move(self):
-                    self.move()
+                    self.parent.move(self)
         except:
             logging.exception('')
 
@@ -57,13 +58,13 @@ class EmasAgent(Addressable):
     def meet(self, neighbour):
         logger.debug(str(self) + "meets" + str(neighbour))
         if self.get_fitness() > neighbour.get_fitness():
-            transfered_energy = min(self.transferred_energy, neighbour.energy)
-            self.energy += transfered_energy
-            neighbour.add_energy(-transfered_energy)
+            transferred_energy = min(self.transferred_energy, neighbour.energy)
+            self.energy += transferred_energy
+            neighbour.add_energy(-transferred_energy)
         elif self.get_fitness() < neighbour.get_fitness():
-            transfered_energy = min(self.transferred_energy, self.energy)
-            self.energy -= transfered_energy
-            neighbour.add_energy(transfered_energy)
+            transferred_energy = min(self.transferred_energy, self.energy)
+            self.energy -= transferred_energy
+            neighbour.add_energy(transferred_energy)
         if self.emas.should_die(self):
             self.death()
 
@@ -91,20 +92,12 @@ class EmasAgent(Addressable):
                 siblings.pop().add_energy(e)
                 left -= e
 
-    def move(self):
-        allowed_moves = self.locator.get_allowed_moves(self)
-        if allowed_moves:
-            self.locator.remove_agent(self)
-            destination = get_random_move(allowed_moves)
-            self.locator.add_agent(self, destination)
-            logger.debug("%s moved to %s" % (self, destination))
-
     def __repr__(self):
         return "<EmasAgent@%s>" % self.get_address()
 
 
 class EmasService(object):
-    @Inject("minimal_energy", "reproduction_minimum", "migration_minimum", "newborn_energy", "locator")
+    @Inject("minimal_energy", "reproduction_minimum", "migration_minimum", "newborn_energy")
     @InjectWithDefault(("move_probability", 0.1))
     def __init__(self):
         super(EmasService, self).__init__()
@@ -114,7 +107,7 @@ class EmasService(object):
 
     def should_reproduce(self, a1, a2):
         return a1.get_energy() > self.reproduction_minimum and a2.get_energy() > self.reproduction_minimum \
-               and self.locator.get_allowed_moves(a1)
+               and a1.parent.locator.get_allowed_moves(a1)
 
     def can_migrate(self, agent):
         return agent.get_energy() > self.migration_minimum and len(agent.parent.get_agents()) > 10
@@ -130,10 +123,7 @@ class EmasService(object):
         genotype = a1.crossover.cross(a1.genotype, a2.get_genotype())
         a1.mutation.mutate(genotype)
         newborn = EmasAgent(genotype, energy)
-        self.locator.add_agent(newborn, get_random_move(self.locator.get_allowed_moves(a1)))
+        a1.parent.locator.add_agent(newborn, get_random_move(a1.parent.locator.get_allowed_moves(a1)))
         a1.parent.add_agent(newborn)
 
 
-def get_random_move(allowed_moves):
-    destination = random.sample(allowed_moves, 1)[0]
-    return destination
