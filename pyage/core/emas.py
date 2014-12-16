@@ -22,6 +22,8 @@ class EmasAgent(Addressable):
 
     def step(self):
         self.steps += 1
+        if self.dead:
+            return
         try:
             neighbour = self.parent.get_neighbour(self)
             if neighbour:
@@ -31,10 +33,10 @@ class EmasAgent(Addressable):
                     self.emas.reproduce(self, neighbour)
                 else:
                     self.meet(neighbour)
-                if self.emas.can_migrate(self):
-                    self.migration.migrate(self)
-                elif self.emas.should_move(self):
-                    self.parent.move(self)
+            if self.emas.can_migrate(self):
+                self.migration.migrate(self)
+            elif self.emas.should_move(self):
+                self.parent.move(self)
         except:
             logging.exception('')
 

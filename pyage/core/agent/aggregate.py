@@ -1,4 +1,5 @@
 import logging
+import random
 from pyage.core.address import Addressable
 from pyage.core.agent.agent import AbstractAgent
 from pyage.core.inject import Inject, InjectOptional
@@ -43,15 +44,16 @@ class AggregateAgent(Addressable, AbstractAgent):
         return max(self.__agents.values(), key=lambda a: a.get_fitness()).get_best_genotype()
 
     def move(self, agent):
-        allowed_moves = self.locator.get_allowed_moves(self)
+        allowed_moves = self.locator.get_allowed_moves(agent)
         if allowed_moves:
-            self.locator.remove_agent(self)
+            self.locator.remove_agent(agent)
             destination = get_random_move(allowed_moves)
-            self.locator.add_agent(self, destination)
-            logger.debug("%s moved to %s" % (self, destination))
+            self.locator.add_agent(agent, destination)
+            logger.debug("%s moved to %s" % (agent, destination))
 
     def get_neighbour(self, agent):
-        self.locator.get_neighbour(agent)
+        return self.locator.get_neighbour(agent)
+
 
 def aggregate_agents_factory(*args):
     def factory():
