@@ -35,7 +35,7 @@ class EmasAgent(Addressable):
                     self.meet(neighbour)
             if self.emas.can_migrate(self):
                 self.migration.migrate(self)
-            elif self.emas.should_move(self):
+            elif self.parent and self.emas.should_move(self):
                 self.parent.move(self)
         except:
             logging.exception('')
