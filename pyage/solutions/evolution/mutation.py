@@ -2,6 +2,7 @@ import random
 from pyage.core.operator import Operator
 from pyage.solutions.evolution.genotype import PointGenotype, FloatGenotype
 
+
 class AbstractMutation(Operator):
     def __init__(self, type, probability):
         super(AbstractMutation, self).__init__()
@@ -18,7 +19,6 @@ class UniformPointMutation(AbstractMutation):
         super(UniformPointMutation, self).__init__(PointGenotype, probability)
         self.radius = radius
 
-
     def mutate(self, genotype):
         genotype.x = genotype.x + random.uniform(-self.radius, self.radius)
         genotype.y = genotype.y + random.uniform(-self.radius, self.radius)
@@ -29,8 +29,18 @@ class UniformFloatMutation(AbstractMutation):
         super(UniformFloatMutation, self).__init__(FloatGenotype, probability)
         self.radius = radius
 
-
     def mutate(self, genotype):
         index = random.randint(0, len(genotype.genes) - 1)
         genotype.genes[index] += random.uniform(-self.radius, self.radius)
 
+
+class NormalMutation(object):
+    def __init__(self, probability=0.01, radius=0.1):
+        super(NormalMutation, self).__init__()
+        self.probability = probability
+        self.radius = radius
+
+    def mutate(self, genotype):
+        for index in range(len(genotype.genes)):
+            if random.random() < self.probability:
+                genotype.genes[index] = random.gauss(genotype.genes[index], self.radius)
