@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 class EmasAgent(Addressable):
     @Inject("migration", "evaluation", "crossover", "mutation", "emas", "transferred_energy")
+    @InjectWithDefault(("mutation_probability", 0.01))
     def __init__(self, genotype, energy, name=None):
         self.name = name
         super(EmasAgent, self).__init__()
@@ -33,6 +34,7 @@ class EmasAgent(Addressable):
                     self.emas.reproduce(self, neighbour)
                 else:
                     self.meet(neighbour)
+            self._mutate()
             if self.emas.can_migrate(self):
                 self.migration.migrate(self)
             elif self.parent and self.emas.should_move(self):
@@ -93,6 +95,10 @@ class EmasAgent(Addressable):
                 e = min(left, 1)
                 siblings.pop().add_energy(e)
                 left -= e
+
+    def _mutate(self):
+        if random.random() < self.mutation_probability:
+            self.mutation.mutate(self.genotype)
 
     def __repr__(self):
         return "<EmasAgent@%s>" % self.get_address()
