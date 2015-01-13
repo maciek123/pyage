@@ -2,6 +2,7 @@ import random
 from pyage.core.operator import Operator
 from pyage.solutions.evolution.genotype import PointGenotype, FloatGenotype
 
+
 class AbstractCrossover(Operator):
     def __init__(self, type, size):
         super(AbstractCrossover, self).__init__(type)
@@ -32,11 +33,21 @@ class AverageFloatCrossover(AbstractCrossover):
         genotype = FloatGenotype([sum(p) / 2.0 for p in zip(p1.genes, p2.genes)])
         return genotype
 
+
 class SinglePointCrossover(AbstractCrossover):
     def __init__(self, size=100):
         super(SinglePointCrossover, self).__init__(FloatGenotype, size)
 
-
     def cross(self, p1, p2):
         crossingPoint = random.randint(1, len(p1.genes))
         return FloatGenotype(p1.genes[:crossingPoint] + p2.genes[crossingPoint:])
+
+
+class UniformCrossover(AbstractCrossover):
+    def __init__(self, size=100, probability=0.5):
+        super(UniformCrossover, self).__init__(FloatGenotype, size)
+        self.probability = probability
+
+    def cross(self, p1, p2):
+        return FloatGenotype([p1.genes[i] if random.random() < self.probability else p2.genes[i]
+                             for i in range(len(p1.genes))])
