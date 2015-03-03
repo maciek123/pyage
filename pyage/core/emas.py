@@ -99,6 +99,7 @@ class EmasAgent(Addressable):
     def _mutate(self):
         if random.random() < self.mutation_probability:
             self.mutation.mutate(self.genotype)
+            self.evaluation.process([self.genotype])
 
     def __repr__(self):
         return "<EmasAgent@%s>" % self.get_address()
