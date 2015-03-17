@@ -98,7 +98,7 @@ class EmasAgent(Addressable):
 
     def _mutate(self):
         if random.random() < self.mutation_probability:
-            self.mutation.mutate(self.genotype)
+            self.mutation.process([self.genotype])
             self.evaluation.process([self.genotype])
 
     def __repr__(self):
@@ -130,7 +130,7 @@ class EmasService(object):
         a1.energy -= self.newborn_energy / 2
         a2.add_energy(-self.newborn_energy / 2)
         genotype = a1.crossover.cross(a1.genotype, a2.get_genotype())
-        a1.mutation.mutate(genotype)
+        a1.mutation.process([genotype])
         newborn = EmasAgent(genotype, energy)
         a1.parent.locator.add_agent(newborn, get_random_move(a1.parent.locator.get_allowed_moves(a1)))
         a1.parent.add_agent(newborn)

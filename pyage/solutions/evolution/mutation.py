@@ -40,6 +40,10 @@ class NormalMutation(object):
         self.probability = probability
         self.radius = radius
 
+    def process(self, population):
+        for genotype in population:
+            self.mutate(genotype)
+
     def mutate(self, genotype):
         for index in range(len(genotype.genes)):
             if random.random() < self.probability:
