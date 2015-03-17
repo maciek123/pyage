@@ -20,6 +20,7 @@ class AggregateAgent(Addressable, AbstractAgent):
     def step(self):
         for agent in self.__agents.values():
             agent.step()
+        self.steps += 1
 
     def remove_agent(self, agent):
         del self.__agents[agent.get_address()]
