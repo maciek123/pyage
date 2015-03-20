@@ -34,7 +34,6 @@ class EmasAgent(Addressable):
                     self.emas.reproduce(self, neighbour)
                 else:
                     self.meet(neighbour)
-            self._mutate()
             if self.emas.can_migrate(self):
                 self.migration.migrate(self)
             elif self.parent and self.emas.should_move(self):
