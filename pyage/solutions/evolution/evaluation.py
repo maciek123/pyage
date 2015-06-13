@@ -4,6 +4,7 @@ from pyage.solutions.evolution.genotype import PointGenotype, FloatGenotype
 
 A = 10
 
+
 class FloatRastriginEvaluation(Operator):
     def __init__(self):
         super(FloatRastriginEvaluation, self).__init__(FloatGenotype)
@@ -52,7 +53,7 @@ class SchwefelEvaluation(Operator):
             genotype.fitness = - self.__schwefel(genotype.genes)
 
     def __schwefel(self, genes):
-        sum = 418.9829
+        sum = 418.9829 * len(genes)
         for gene in genes:
             sum += -gene * sin(sqrt(abs(gene)))
         return sum
