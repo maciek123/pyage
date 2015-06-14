@@ -103,6 +103,13 @@ class TestTorusLocator(TestCase):
         locator = TorusLocator(5, 5)
         self.assertEqual(25, locator.add_all([DummyAgent() for _ in range(30)]))
 
+    def test_remove_dead(self):
+        locator = TorusLocator(1, 1)
+        agent = DummyAgent()
+        locator.add_agent(agent, (0, 0))
+        agent.dead = True
+        locator.add_agent(DummyAgent(), (0, 0))
+
 
 class DummyAgent(object):
     def __init__(self):
