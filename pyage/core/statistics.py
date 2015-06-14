@@ -33,7 +33,7 @@ class SimpleStatistics(Statistics):
         try:
             import pylab
             logger.debug(self.history)
-            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness).get_best_genotype())
+            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness()).get_best_genotype())
             pylab.yscale('symlog')
             pylab.savefig(self.plot_file_name)
         except:
@@ -69,7 +69,7 @@ class TimeStatistics(SimpleStatistics):
                 logger.info(url)
                 urllib2.urlopen(url)
             logger.debug(self.history)
-            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness).get_best_genotype())
+            logger.debug("best genotype: %s", max(agents, key=lambda a: a.get_fitness()).get_best_genotype())
         except:
             logging.exception("")
 
