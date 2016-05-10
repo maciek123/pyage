@@ -1,10 +1,14 @@
-try:
-    import paver.tasks
-except ImportError:
-    from os.path import exists
-    if exists("paver-minilib.zip"):
-        import sys
-        sys.path.insert(0, "paver-minilib.zip")
-    import paver.tasks
+# coding=utf-8
+from distutils.core import setup
+from setuptools import find_packages
 
-paver.tasks.main()
+setup(
+    name="pyage",
+    description="Python Agent-based evolution",
+    packages=find_packages(),
+    version="1.2.11",
+    author="Maciej Kaziród",
+    author_email="kazirod.maciej@gmail.com",
+    requires=['Pyro4(==4.17)']
+)
+
