@@ -8,7 +8,7 @@ Pyage can be run in distributed mode. It can be done in following steps:
 1. set NS_HOSTNAME env. variable to value of NS_IP (ip of nameserver)
 2. set PYRO_HOST variable to ip of current machine
 3. Make sure to use ```migration = PyroMigration``` in your cofig module
-4. Run it as always: ```python -m pyage.core.bootstrap``` CONF replacing conf with your config module
+4. Run it as always: ```python -m pyage.core.bootstrap CONF``` replacing conf with your config module
 
 Example config file
 ---
