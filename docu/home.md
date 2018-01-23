@@ -70,7 +70,7 @@ Parameters you may want to change:
 
 Further reading
 ---
-[How to solve custom problems using Pyage](./howto.md)
-Implementing your own components
-Extending Pyage with new agents
-Running Pyage in distributed mode 
+- [How to solve custom problems using Pyage](./howto.md)
+- [Implementing your own components](./implementing.md)
+- [Extending Pyage with new agents](./extending.md)
+- [Running Pyage in distributed mode](./running.md) 

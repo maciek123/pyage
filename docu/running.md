@@ -56,4 +56,4 @@ daemon = lambda: pyro_daemon
 
 stats = TimeStatistics
 ```
-To learn implementaion details of migrating agents while running in distributed mode, read Migration page. 
+To learn implementaion details of migrating agents while running in distributed mode, read [Migration](./migration.md) page. 
