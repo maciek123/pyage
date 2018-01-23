@@ -42,8 +42,10 @@ mutation = NormalMutation
 
 address_provider = address.SequenceAddressProvider
 
-torus = TorusLocator(10, 10)
-locator = lambda: torus
+# torus = TorusLocator(10, 10)
+# locator = lambda: torus
+
+locator = TorusLocator
 
 migration = Pyro4Migration
 ns_hostname = lambda: os.environ['NS_HOSTNAME']
