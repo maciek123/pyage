@@ -9,8 +9,10 @@ Pyage can be run in distributed mode. It can be done in following steps:
 2. set PYRO_HOST variable to ip of current machine
 3. Make sure to use ```migration = PyroMigration``` in your cofig module
 4. Run it as always: ```python -m pyage.core.bootstrap``` CONF replacing conf with your config module
+
 Example config file
 ---
+
 Example configuration for running EMAS in distributed mode:
 ```
 # coding=utf-8
