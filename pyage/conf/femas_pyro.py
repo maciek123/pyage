@@ -10,7 +10,7 @@ from pyage.core.agent.aggregate import AggregateAgent
 from pyage.core.emas import EmasService
 from pyage.core.locator import TorusLocator
 from pyage.core.migration import Pyro4Migration
-from pyage.core.statistics import NoStatistics
+from pyage.core.stats.gnuplot import StepStatistics
 from pyage.core.stop_condition import StepLimitStopCondition
 from pyage.solutions.evolution.crossover import SinglePointCrossover
 from pyage.solutions.evolution.evaluation import FloatRastriginEvaluation
@@ -42,14 +42,11 @@ mutation = NormalMutation
 
 address_provider = address.SequenceAddressProvider
 
-# torus = TorusLocator(10, 10)
-# locator = lambda: torus
-
-locator = TorusLocator
+locator = lambda: TorusLocator(10, 10)
 
 migration = Pyro4Migration
 ns_hostname = lambda: os.environ['NS_HOSTNAME']
 pyro_daemon = Pyro4.Daemon()
 daemon = lambda: pyro_daemon
 
-stats = NoStatistics
+stats = lambda: StepStatistics('fitness_%s_pyage.txt' % __name__)
